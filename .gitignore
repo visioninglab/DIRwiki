@@ -1,0 +1,12 @@
+# Source documents
+DIRcasestudies_v1/
+DIRcasestudies_v1.zip
+
+# Temporary scripts
+extract_docx.ps1
+read_docx.ps1
+process-html.ps1
+fix-breadcrumbs.ps1
+
+# StatiCrypt
+.staticrypt.json
