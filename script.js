@@ -1,5 +1,5 @@
 /* ============================================================
-   DIR Case Study Wiki — Shared JavaScript
+   DIR Case Study Wiki — Shared JavaScript  (v2)
    ============================================================ */
 
 (function () {
@@ -7,14 +7,11 @@
 
   /* --- Accessibility: add ARIA attributes on load --- */
   function initAccessibility() {
-    // Section headers: keyboard support + ARIA
     document.querySelectorAll('.section-header').forEach(function (header) {
       header.setAttribute('role', 'button');
       header.setAttribute('tabindex', '0');
       var section = header.parentElement;
       header.setAttribute('aria-expanded', section.classList.contains('collapsed') ? 'false' : 'true');
-
-      // Keyboard: Enter or Space to toggle
       header.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -22,8 +19,6 @@
         }
       });
     });
-
-    // Hide emoji icons from screen readers
     document.querySelectorAll('.section-icon, .about-section-icon').forEach(function (icon) {
       icon.setAttribute('aria-hidden', 'true');
     });
@@ -43,7 +38,6 @@
     var tocLinks = document.querySelectorAll('.toc a');
     var sections = document.querySelectorAll('.section[id]');
     if (!tocLinks.length || !sections.length) return;
-
     function updateToc() {
       var current = '';
       sections.forEach(function (s) {
@@ -61,21 +55,17 @@
   function initMobileToc() {
     var toc = document.querySelector('.toc');
     if (!toc) return;
-
     var links = toc.querySelectorAll('a');
     if (!links.length) return;
-
     var linksWrapper = document.createElement('div');
     linksWrapper.className = 'toc-links';
     links.forEach(function (a) { linksWrapper.appendChild(a); });
     toc.appendChild(linksWrapper);
-
     var toggle = document.createElement('button');
     toggle.className = 'toc-toggle';
     toggle.textContent = 'Show contents';
     toggle.setAttribute('aria-expanded', 'false');
     toc.appendChild(toggle);
-
     toggle.addEventListener('click', function () {
       toc.classList.toggle('open');
       var open = toc.classList.contains('open');
@@ -84,8 +74,8 @@
     });
   }
 
-  /* --- Homepage: multi-dimensional filters --- */
-  var activeFilters = { sector: 'all', hazard: 'all' };
+  /* --- Homepage: multi-dimensional filters + search --- */
+  var activeFilters = { sector: 'all', hazard: 'all', location: 'all' };
   var searchQuery = '';
 
   function setFilter(dimension, value, btn) {
@@ -99,14 +89,34 @@
   }
   window.setFilter = setFilter;
 
+  function setLocation(loc) {
+    activeFilters.location = (activeFilters.location === loc) ? 'all' : loc;
+    updateMap();
+    applyFilters();
+    updateURL();
+    updateResetBtn();
+  }
+  window.setLocation = setLocation;
+
+  function resetMap() {
+    activeFilters.location = 'all';
+    updateMap();
+    applyFilters();
+    updateURL();
+    updateResetBtn();
+  }
+  window.resetMap = resetMap;
+
   function resetAllFilters() {
     activeFilters.sector = 'all';
     activeFilters.hazard = 'all';
+    activeFilters.location = 'all';
     searchQuery = '';
     var searchInput = document.getElementById('studySearch');
     if (searchInput) searchInput.value = '';
     activateButton('sectorFilter', 'all');
     activateButton('hazardFilter', 'all');
+    updateMap();
     applyFilters();
     updateURL();
     updateResetBtn();
@@ -116,21 +126,52 @@
   function updateResetBtn() {
     var btn = document.getElementById('resetFilters');
     if (!btn) return;
-    var hasFilters = activeFilters.sector !== 'all' || activeFilters.hazard !== 'all' || searchQuery !== '';
+    var hasFilters = activeFilters.sector !== 'all' || activeFilters.hazard !== 'all' || activeFilters.location !== 'all' || searchQuery !== '';
     btn.style.display = hasFilters ? '' : 'none';
+  }
+
+  function updateMap() {
+    var loc = activeFilters.location;
+    var resetBtn = document.getElementById('mapResetBtn');
+    if (!resetBtn) return;
+    resetBtn.classList.toggle('hidden', loc === 'all');
+
+    document.querySelectorAll('.map-region').forEach(function (region) {
+      var regionLoc = region.dataset.location;
+      region.classList.remove('active', 'dimmed');
+      if (loc !== 'all') {
+        region.classList.add(regionLoc === loc ? 'active' : 'dimmed');
+      }
+    });
+
+    document.querySelectorAll('.map-label, .map-count').forEach(function (el) {
+      el.classList.remove('active');
+    });
+    if (loc !== 'all') {
+      var activeRegion = document.querySelector('.map-region.active');
+      if (activeRegion) {
+        var next = activeRegion.nextElementSibling;
+        while (next && (next.classList.contains('map-label') || next.classList.contains('map-count'))) {
+          next.classList.add('active');
+          next = next.nextElementSibling;
+        }
+      }
+    }
   }
 
   function applyFilters() {
     var sector = activeFilters.sector;
     var hazard = activeFilters.hazard;
+    var location = activeFilters.location;
     var query = searchQuery.toLowerCase();
     var visibleCount = 0;
 
     document.querySelectorAll('.study-card').forEach(function (card) {
       var matchSector = (sector === 'all' || card.dataset.sector === sector);
       var matchHazard = (hazard === 'all' || (card.dataset.hazard && card.dataset.hazard.split(' ').indexOf(hazard) !== -1));
+      var matchLocation = (location === 'all' || card.dataset.location === location);
       var matchSearch = !query || card.textContent.toLowerCase().indexOf(query) !== -1;
-      var visible = matchSector && matchHazard && matchSearch;
+      var visible = matchSector && matchHazard && matchLocation && matchSearch;
       card.style.display = visible ? '' : 'none';
       if (visible) visibleCount++;
     });
@@ -144,11 +185,13 @@
   function initSearch() {
     var input = document.getElementById('studySearch');
     if (!input) return;
-    input.addEventListener('input', function () {
+    var handler = function () {
       searchQuery = input.value.trim();
       applyFilters();
       updateResetBtn();
-    });
+    };
+    input.addEventListener('input', handler);
+    input.addEventListener('keyup', handler);
   }
 
   /* --- URL parameter support (homepage) --- */
@@ -156,6 +199,7 @@
     var params = new URLSearchParams(window.location.search);
     var sector = params.get('sector');
     var hazard = params.get('hazard');
+    var location = params.get('location');
 
     if (sector) {
       activeFilters.sector = sector;
@@ -165,8 +209,12 @@
       activeFilters.hazard = hazard;
       activateButton('hazardFilter', hazard);
     }
+    if (location) {
+      activeFilters.location = location;
+      updateMap();
+    }
 
-    if (sector || hazard) {
+    if (sector || hazard || location) {
       applyFilters();
       updateResetBtn();
     }
@@ -191,6 +239,7 @@
     var params = new URLSearchParams();
     if (activeFilters.sector !== 'all') params.set('sector', activeFilters.sector);
     if (activeFilters.hazard !== 'all') params.set('hazard', activeFilters.hazard);
+    if (activeFilters.location !== 'all') params.set('location', activeFilters.location);
     var qs = params.toString();
     var url = window.location.pathname + (qs ? '?' + qs : '');
     history.replaceState(null, '', url);
@@ -200,17 +249,14 @@
   function initGlossary() {
     var input = document.getElementById('glossarySearch');
     if (!input) return;
-
-    input.addEventListener('input', function () {
+    var handler = function () {
       var query = input.value.trim().toLowerCase();
       var groups = document.querySelectorAll('.glossary-group');
       var anyVisible = false;
-
       groups.forEach(function (group) {
         var dts = group.querySelectorAll('dt');
         var dds = group.querySelectorAll('dd');
         var groupVisible = false;
-
         for (var i = 0; i < dts.length; i++) {
           var text = dts[i].textContent.toLowerCase() + ' ' + dds[i].textContent.toLowerCase();
           var match = !query || text.indexOf(query) !== -1;
@@ -218,16 +264,16 @@
           dds[i].style.display = match ? '' : 'none';
           if (match) groupVisible = true;
         }
-
         group.style.display = groupVisible ? '' : 'none';
         if (groupVisible) anyVisible = true;
       });
-
       var noResults = document.getElementById('glossaryNoResults');
       if (noResults) {
         noResults.style.display = anyVisible ? 'none' : 'block';
       }
-    });
+    };
+    input.addEventListener('input', handler);
+    input.addEventListener('keyup', handler);
   }
 
   /* --- Initialize on DOM ready --- */
@@ -236,13 +282,10 @@
     initToc();
     initMobileToc();
 
-    // Homepage: search, filters, URL params
     if (document.getElementById('studiesGrid')) {
       initSearch();
       readURL();
     }
-
-    // Glossary: filter
     if (document.getElementById('glossaryList')) {
       initGlossary();
     }

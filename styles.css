@@ -914,17 +914,27 @@ body {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 1rem 1.25rem;
+  overflow: hidden;
   text-decoration: none;
   color: inherit;
   display: flex;
   flex-direction: column;
-  gap: 4px;
   transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 .related-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+.related-card-banner {
+  height: 6px;
+  flex-shrink: 0;
+}
+.related-card-body {
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 .related-card-cat {
   font-size: 11px;
@@ -939,6 +949,12 @@ body {
   font-weight: 600;
   color: var(--ink);
   line-height: 1.3;
+}
+.related-card-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-top: 2px;
 }
 
 /* === GLOSSARY (glossary page) === */
@@ -971,6 +987,16 @@ body {
   padding: 1rem 1.5rem;
   margin-bottom: 0.75rem;
 }
+.glossary-letter {
+  font-family: 'Source Serif 4', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 0.5rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent-light);
+  letter-spacing: -0.01em;
+}
 .glossary-list dt {
   font-weight: 700;
   font-size: 15px;
@@ -979,7 +1005,7 @@ body {
   padding-top: 0.75rem;
   border-top: 1px solid var(--border);
 }
-.glossary-list dt:first-child {
+.glossary-letter + dt {
   margin-top: 0;
   padding-top: 0;
   border-top: none;
@@ -990,6 +1016,17 @@ body {
   line-height: 1.6;
   margin: 0.25rem 0 0 0;
 }
+.glossary-ref {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+}
+.glossary-ref a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+.glossary-ref a:hover { text-decoration: underline; }
 .glossary-no-results {
   text-align: center;
   padding: 2rem 1rem;

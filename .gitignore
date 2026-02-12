@@ -9,6 +9,7 @@ process-html.ps1
 fix-breadcrumbs.ps1
 update-pages.ps1
 remove-font.ps1
+update-cards.ps1
 
 # StatiCrypt
 .staticrypt.json
