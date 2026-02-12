@@ -62,7 +62,6 @@
     var toc = document.querySelector('.toc');
     if (!toc) return;
 
-    // Wrap existing TOC links in a container if not already wrapped
     var links = toc.querySelectorAll('a');
     if (!links.length) return;
 
@@ -71,7 +70,6 @@
     links.forEach(function (a) { linksWrapper.appendChild(a); });
     toc.appendChild(linksWrapper);
 
-    // Create toggle button
     var toggle = document.createElement('button');
     toggle.className = 'toc-toggle';
     toggle.textContent = 'Show contents';
@@ -87,7 +85,8 @@
   }
 
   /* --- Homepage: multi-dimensional filters --- */
-  var activeFilters = { sector: 'all', hazard: 'all', location: 'all' };
+  var activeFilters = { sector: 'all', hazard: 'all' };
+  var searchQuery = '';
 
   function setFilter(dimension, value, btn) {
     activeFilters[dimension] = value;
@@ -96,83 +95,60 @@
     btn.classList.add('active');
     applyFilters();
     updateURL();
+    updateResetBtn();
   }
   window.setFilter = setFilter;
 
-  function setLocation(loc) {
-    activeFilters.location = (activeFilters.location === loc) ? 'all' : loc;
-    updateMap();
+  function resetAllFilters() {
+    activeFilters.sector = 'all';
+    activeFilters.hazard = 'all';
+    searchQuery = '';
+    var searchInput = document.getElementById('studySearch');
+    if (searchInput) searchInput.value = '';
+    activateButton('sectorFilter', 'all');
+    activateButton('hazardFilter', 'all');
     applyFilters();
     updateURL();
+    updateResetBtn();
   }
-  window.setLocation = setLocation;
+  window.resetAllFilters = resetAllFilters;
 
-  function resetMap() {
-    activeFilters.location = 'all';
-    updateMap();
-    applyFilters();
-    updateURL();
-  }
-  window.resetMap = resetMap;
-
-  function updateMap() {
-    var loc = activeFilters.location;
-    var resetBtn = document.getElementById('mapResetBtn');
-    if (!resetBtn) return;
-
-    if (loc === 'all') {
-      resetBtn.classList.add('hidden');
-    } else {
-      resetBtn.classList.remove('hidden');
-    }
-
-    document.querySelectorAll('.map-region').forEach(function (region) {
-      var regionLoc = region.dataset.location;
-      region.classList.remove('active', 'dimmed');
-      if (loc !== 'all') {
-        if (regionLoc === loc) {
-          region.classList.add('active');
-        } else {
-          region.classList.add('dimmed');
-        }
-      }
-    });
-
-    document.querySelectorAll('.map-label, .map-count').forEach(function (label) {
-      label.classList.remove('active');
-    });
-    if (loc !== 'all') {
-      var activeRegion = document.querySelector('.map-region.active');
-      if (activeRegion) {
-        var next = activeRegion.nextElementSibling;
-        while (next && (next.classList.contains('map-label') || next.classList.contains('map-count'))) {
-          next.classList.add('active');
-          next = next.nextElementSibling;
-        }
-      }
-    }
+  function updateResetBtn() {
+    var btn = document.getElementById('resetFilters');
+    if (!btn) return;
+    var hasFilters = activeFilters.sector !== 'all' || activeFilters.hazard !== 'all' || searchQuery !== '';
+    btn.style.display = hasFilters ? '' : 'none';
   }
 
   function applyFilters() {
     var sector = activeFilters.sector;
     var hazard = activeFilters.hazard;
-    var location = activeFilters.location;
+    var query = searchQuery.toLowerCase();
     var visibleCount = 0;
 
     document.querySelectorAll('.study-card').forEach(function (card) {
       var matchSector = (sector === 'all' || card.dataset.sector === sector);
       var matchHazard = (hazard === 'all' || (card.dataset.hazard && card.dataset.hazard.split(' ').indexOf(hazard) !== -1));
-      var matchLocation = (location === 'all' || card.dataset.location === location);
-      var visible = matchSector && matchHazard && matchLocation;
+      var matchSearch = !query || card.textContent.toLowerCase().indexOf(query) !== -1;
+      var visible = matchSector && matchHazard && matchSearch;
       card.style.display = visible ? '' : 'none';
       if (visible) visibleCount++;
     });
 
-    // Show/hide no-results message
     var noResults = document.getElementById('noResults');
     if (noResults) {
       noResults.style.display = visibleCount === 0 ? 'block' : 'none';
     }
+  }
+
+  function initSearch() {
+    var input = document.getElementById('studySearch');
+    if (!input) return;
+    input.addEventListener('input', function () {
+      searchQuery = input.value.trim();
+      applyFilters();
+      updateResetBtn();
+    });
   }
 
   /* --- URL parameter support (homepage) --- */
@@ -180,7 +156,6 @@
     var params = new URLSearchParams(window.location.search);
     var sector = params.get('sector');
     var hazard = params.get('hazard');
-    var location = params.get('location');
 
     if (sector) {
       activeFilters.sector = sector;
@@ -190,13 +165,10 @@
       activeFilters.hazard = hazard;
       activateButton('hazardFilter', hazard);
     }
-    if (location) {
-      activeFilters.location = location;
-      updateMap();
-    }
 
-    if (sector || hazard || location) {
+    if (sector || hazard) {
       applyFilters();
+      updateResetBtn();
     }
   }
 
@@ -219,10 +191,43 @@
     var params = new URLSearchParams();
     if (activeFilters.sector !== 'all') params.set('sector', activeFilters.sector);
     if (activeFilters.hazard !== 'all') params.set('hazard', activeFilters.hazard);
-    if (activeFilters.location !== 'all') params.set('location', activeFilters.location);
     var qs = params.toString();
     var url = window.location.pathname + (qs ? '?' + qs : '');
     history.replaceState(null, '', url);
+  }
+
+  /* --- Glossary: filter terms --- */
+  function initGlossary() {
+    var input = document.getElementById('glossarySearch');
+    if (!input) return;
+
+    input.addEventListener('input', function () {
+      var query = input.value.trim().toLowerCase();
+      var groups = document.querySelectorAll('.glossary-group');
+      var anyVisible = false;
+
+      groups.forEach(function (group) {
+        var dts = group.querySelectorAll('dt');
+        var dds = group.querySelectorAll('dd');
+        var groupVisible = false;
+
+        for (var i = 0; i < dts.length; i++) {
+          var text = dts[i].textContent.toLowerCase() + ' ' + dds[i].textContent.toLowerCase();
+          var match = !query || text.indexOf(query) !== -1;
+          dts[i].style.display = match ? '' : 'none';
+          dds[i].style.display = match ? '' : 'none';
+          if (match) groupVisible = true;
+        }
+
+        group.style.display = groupVisible ? '' : 'none';
+        if (groupVisible) anyVisible = true;
+      });
+
+      var noResults = document.getElementById('glossaryNoResults');
+      if (noResults) {
+        noResults.style.display = anyVisible ? 'none' : 'block';
+      }
+    });
   }
 
   /* --- Initialize on DOM ready --- */
@@ -231,9 +236,15 @@
     initToc();
     initMobileToc();
 
-    // Homepage: read URL params and apply filters
+    // Homepage: search, filters, URL params
     if (document.getElementById('studiesGrid')) {
+      initSearch();
       readURL();
+    }
+
+    // Glossary: filter
+    if (document.getElementById('glossaryList')) {
+      initGlossary();
     }
   });
 })();
