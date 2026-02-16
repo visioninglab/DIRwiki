@@ -98,7 +98,7 @@ body {
 
 /* === HERO === */
 .hero {
-  background: var(--stallion) url('hero-horse.jpg') center/cover no-repeat;
+  background: var(--stallion) url('hero-abstract.jpg') center/cover no-repeat;
   padding: 4rem 2rem 3.5rem;
   color: #fff;
   position: relative;
