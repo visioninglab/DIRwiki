@@ -169,15 +169,136 @@
     container.innerHTML = '';
     Object.keys(CASE_STUDY_FIXTURES).forEach(function (key) {
       var cs = CASE_STUDY_FIXTURES[key];
-      var tile = el('button', {
-        className: 'diag-case-tile',
+
+      // Calculate overall score for this case study
+      var scores = PRINCIPLES.map(function (p) {
+        var v = cs.principleScores[p.id];
+        return (v != null && v >= 0) ? v : 0;
+      });
+      var sum = 0; var cnt = 0;
+      scores.forEach(function (v) { if (v > 0) { sum += v; cnt++; } });
+      var overall = cnt > 0 ? sum / cnt : 0;
+
+      var tile = el('div', { className: 'diag-case-tile-card' });
+
+      // Header row: title + score badge
+      var header = el('div', { className: 'diag-case-tile-header' });
+      header.appendChild(el('span', { className: 'diag-case-tile-title', textContent: cs.title }));
+      header.appendChild(el('span', { className: 'diag-case-tile-score', textContent: overall.toFixed(1) + '/5' }));
+      tile.appendChild(header);
+
+      // Scale + sector tag
+      var meta = el('div', { className: 'diag-case-tile-meta' });
+      meta.appendChild(el('span', { textContent: (cs.system.scale || '').charAt(0).toUpperCase() + (cs.system.scale || '').slice(1) + ' \u2022 ' + (cs.system.sector || '').charAt(0).toUpperCase() + (cs.system.sector || '').slice(1) }));
+      tile.appendChild(meta);
+
+      // Mini score bar
+      var barWrap = el('div', { className: 'diag-case-tile-bar' });
+      var barFill = el('div', { className: 'diag-case-tile-bar-fill' });
+      barFill.style.width = Math.round((overall / 5) * 100) + '%';
+      barWrap.appendChild(barFill);
+      tile.appendChild(barWrap);
+
+      // Actions row
+      var actions = el('div', { className: 'diag-case-tile-actions' });
+      var viewBtn = el('button', {
+        className: 'diag-case-tile-btn',
+        textContent: 'View scores \u2192',
         onClick: function () { loadCaseStudy(key); }
-      }, [
-        el('span', { className: 'diag-case-tile-title', textContent: cs.title }),
-        el('span', { className: 'diag-case-tile-action', textContent: 'View results \u2192' })
-      ]);
+      });
+      actions.appendChild(viewBtn);
+      if (cs.link) {
+        var readLink = el('a', {
+          className: 'diag-case-tile-link',
+          href: cs.link,
+          textContent: 'Read case study'
+        });
+        actions.appendChild(readLink);
+      }
+      tile.appendChild(actions);
+
       container.appendChild(tile);
     });
+  }
+
+  function renderCaseOverview() {
+    var container = $('#caseOverview');
+    if (!container || typeof CASE_STUDY_FIXTURES === 'undefined') return;
+
+    container.innerHTML = '';
+
+    var header = el('div', { className: 'diag-overview-header' });
+    header.appendChild(el('h3', { textContent: 'Case Study Resilience Scores' }));
+    header.appendChild(el('p', { textContent: 'Pre-assessed case studies from the wiki, scored against the six UNDRR principles.' }));
+    container.appendChild(header);
+
+    var grid = el('div', { className: 'diag-overview-grid' });
+
+    Object.keys(CASE_STUDY_FIXTURES).forEach(function (key) {
+      var cs = CASE_STUDY_FIXTURES[key];
+
+      // Calculate overall score
+      var scores = PRINCIPLES.map(function (p) {
+        var v = cs.principleScores[p.id];
+        return (v != null && v >= 0) ? v : 0;
+      });
+      var sum = 0; var cnt = 0;
+      scores.forEach(function (v) { if (v > 0) { sum += v; cnt++; } });
+      var overall = cnt > 0 ? sum / cnt : 0;
+      var level = Math.min(Math.round(overall), 5);
+
+      var card = el('div', { className: 'diag-overview-card' });
+
+      // Score header
+      var scoreHeader = el('div', { className: 'diag-overview-card-header' });
+      var scoreCircle = el('div', { className: 'diag-overview-score-circle' });
+      scoreCircle.appendChild(el('span', { className: 'diag-overview-score-num', textContent: overall.toFixed(1) }));
+      scoreCircle.appendChild(el('span', { className: 'diag-overview-score-label', textContent: SCORE_LABELS[level] }));
+      scoreHeader.appendChild(scoreCircle);
+      var titleBlock = el('div', { className: 'diag-overview-title-block' });
+      titleBlock.appendChild(el('h4', { textContent: cs.title }));
+      titleBlock.appendChild(el('span', { className: 'diag-overview-meta', textContent: (cs.system.scale || '').charAt(0).toUpperCase() + (cs.system.scale || '').slice(1) + ' \u2022 ' + (cs.system.sector || '').charAt(0).toUpperCase() + (cs.system.sector || '').slice(1) }));
+      scoreHeader.appendChild(titleBlock);
+      card.appendChild(scoreHeader);
+
+      // Principle mini-bars
+      var bars = el('div', { className: 'diag-overview-bars' });
+      PRINCIPLES.forEach(function (p, i) {
+        var pScore = scores[i];
+        var pct = Math.round((pScore / 5) * 100);
+        var row = el('div', { className: 'diag-overview-bar-row' });
+        row.appendChild(el('span', { className: 'diag-overview-bar-label', textContent: p.num }));
+        var barOuter = el('div', { className: 'diag-overview-bar-track' });
+        var barInner = el('div', { className: 'diag-overview-bar-fill' });
+        barInner.style.width = pct + '%';
+        barInner.style.background = pScore >= 4 ? '#059669' : pScore >= 3 ? 'var(--accent)' : pScore >= 2 ? '#d97706' : '#dc2626';
+        barOuter.appendChild(barInner);
+        row.appendChild(barOuter);
+        row.appendChild(el('span', { className: 'diag-overview-bar-val', textContent: pScore + '/5' }));
+        bars.appendChild(row);
+      });
+      card.appendChild(bars);
+
+      // Actions
+      var actions = el('div', { className: 'diag-overview-actions' });
+      actions.appendChild(el('button', {
+        className: 'diag-overview-btn-primary',
+        textContent: 'View full results \u2192',
+        onClick: function () { loadCaseStudy(key); }
+      }));
+      if (cs.link) {
+        actions.appendChild(el('a', {
+          className: 'diag-overview-btn-secondary',
+          href: cs.link,
+          textContent: 'Read case study'
+        }));
+      }
+      card.appendChild(actions);
+
+      grid.appendChild(card);
+    });
+
+    container.appendChild(grid);
   }
 
   function loadCaseStudy(key) {
@@ -891,8 +1012,9 @@
       state.caseStudy = null;
     }
 
-    // Case study tiles
+    // Case study tiles + overview
     renderCaseTiles();
+    renderCaseOverview();
 
     // Populate context fields if on step 1
     if (state.system.name && $('#ctxSystem')) $('#ctxSystem').value = state.system.name;
@@ -907,6 +1029,11 @@
 
     // Go to saved step
     goToStep(state.currentStep);
+
+    // Re-render Lucide icons after dynamic content is created
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
   }
 
   if (document.getElementById('assessApp')) {
