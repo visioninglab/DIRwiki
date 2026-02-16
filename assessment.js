@@ -18,26 +18,26 @@
   var PRINCIPLES = [
     {
       id: 'p1',
-      name: 'Clearly Defined Accountabilities',
-      fullName: 'Clearly defined accountabilities and shared responsibilities',
+      name: 'Continuously Learning',
+      fullName: 'P1 \u2014 Continuously learning and improving',
       scores: [
-        { id: 'clarity', label: 'Clarity of roles', prompt: 'How clearly are resilience roles and responsibilities defined across the system?' },
-        { id: 'ownership', label: 'Decision ownership', prompt: 'How well is ownership established for resilience-related decisions and actions?' },
-        { id: 'escalation', label: 'Escalation pathways', prompt: 'How effective are escalation and reporting pathways when resilience issues arise?' }
+        { id: 'assumptions', label: 'Assumptions validated', prompt: 'How systematically are assumptions in models, plans and operating systems exposed, tested and reviewed?' },
+        { id: 'monitoring', label: 'Monitoring and intervention', prompt: 'How effectively is infrastructure performance monitored and how timely are interventions when issues arise?' },
+        { id: 'lessons', label: 'Lessons captured', prompt: 'How systematically are lessons from incidents, operations and stress tests captured, analysed and applied?' }
       ],
       reflections: [
-        { id: 'blur', prompt: 'Where do responsibilities blur or overlap in practice?' },
-        { id: 'fails', prompt: 'Where does coordination fail or break down between teams or organisations?' }
+        { id: 'notlearned', prompt: 'What lessons are not being captured or acted upon?' },
+        { id: 'sharing', prompt: 'How are lessons and knowledge shared across teams and organisations?' }
       ]
     },
     {
       id: 'p2',
       name: 'Proactively Protected',
-      fullName: 'Proactively protected by design',
+      fullName: 'P2 \u2014 Proactively protected by design',
       scores: [
-        { id: 'anticipation', label: 'Risk anticipation', prompt: 'How well does the system anticipate and prepare for potential disruptions?' },
-        { id: 'monitoring', label: 'Monitoring capability', prompt: 'How effective are monitoring systems for detecting early warning signals?' },
-        { id: 'preparedness', label: 'Preparedness', prompt: 'How prepared is the system to respond to disruptions when they occur?' }
+        { id: 'safety', label: 'Safety requirements', prompt: 'How well are essential safety requirements raised and maintained across the infrastructure system?' },
+        { id: 'interdependencies', label: 'Interdependency management', prompt: 'How effectively are complex interdependencies between infrastructure systems considered and managed?' },
+        { id: 'emergency', label: 'Emergency preparedness', prompt: 'How well is emergency management embedded, including fail-safe design and long-term maintenance commitments?' }
       ],
       reflections: [
         { id: 'unknown', prompt: 'What are the biggest unknown or under-assessed risks?' },
@@ -47,11 +47,11 @@
     {
       id: 'p3',
       name: 'Environmentally Integrated',
-      fullName: 'Environmentally integrated with natural systems',
+      fullName: 'P3 \u2014 Environmentally integrated with natural systems',
       scores: [
-        { id: 'data', label: 'Environmental data use', prompt: 'How effectively is environmental data used in planning and decision-making?' },
-        { id: 'longterm', label: 'Long-term planning', prompt: 'How well does long-term planning account for environmental change and uncertainty?' },
-        { id: 'ecosystem', label: 'Ecosystem awareness', prompt: 'How well are ecosystem dependencies and impacts understood and managed?' }
+        { id: 'impact', label: 'Environmental impact', prompt: 'How effectively is the environmental impact of infrastructure minimised through design and operation?' },
+        { id: 'solutions', label: 'Environmental solutions', prompt: 'How well are environmental and nature-based solutions used to enhance infrastructure resilience?' },
+        { id: 'ecosystem', label: 'Ecosystem integration', prompt: 'How well is ecosystem information integrated into planning, and are natural systems and local sustainable resources maintained?' }
       ],
       reflections: [
         { id: 'blindspots', prompt: 'What are the environmental blind spots in current planning?' },
@@ -61,11 +61,11 @@
     {
       id: 'p4',
       name: 'Socially Engaged',
-      fullName: 'Socially engaged with communities and stakeholders',
+      fullName: 'P4 \u2014 Socially engaged with communities and stakeholders',
       scores: [
-        { id: 'input', label: 'Stakeholder input', prompt: 'How meaningfully are stakeholders involved in resilience planning and decisions?' },
-        { id: 'communication', label: 'Public communication', prompt: 'How effective is communication with the public about resilience risks and actions?' },
-        { id: 'trust', label: 'Trust and legitimacy', prompt: 'How much trust exists between the system operators and affected communities?' }
+        { id: 'information', label: 'Disruption information', prompt: 'How effectively are people informed about disruptions and resilience risks?' },
+        { id: 'literacy', label: 'Resilience literacy', prompt: 'How well is resilience literacy raised across communities and stakeholders?' },
+        { id: 'participation', label: 'Community participation', prompt: 'How meaningfully are communities encouraged to participate in infrastructure decision-making?' }
       ],
       reflections: [
         { id: 'missing', prompt: 'Who is missing from current decision-making processes?' },
@@ -74,30 +74,30 @@
     },
     {
       id: 'p5',
-      name: 'Adaptively Transforming',
-      fullName: 'Adaptively transforming in response to change',
+      name: 'Shared Responsibility',
+      fullName: 'P5 \u2014 Shared responsibility for coordinated benefits',
       scores: [
-        { id: 'flexibility', label: 'Ability to change plans', prompt: 'How readily can plans and strategies be adjusted in response to new information?' },
-        { id: 'innovation', label: 'Innovation adoption', prompt: 'How effectively are new technologies and approaches adopted for resilience?' },
-        { id: 'scenarios', label: 'Scenario planning', prompt: 'How well does the organisation use scenario planning to prepare for multiple futures?' }
+        { id: 'standards', label: 'Open standards', prompt: 'How well are open standards harmonised to facilitate data sharing across sectors?' },
+        { id: 'collaboration', label: 'Collaborative management', prompt: 'How effectively is collaborative management cultivated with clear accountability across stakeholders?' },
+        { id: 'datasharing', label: 'Data safety and sharing', prompt: 'How well is data safety assured to develop trust, and how transparently is risk-and-return information shared?' }
       ],
       reflections: [
-        { id: 'hardest', prompt: 'What is hardest to change in the current system or organisation?' },
-        { id: 'needed', prompt: 'Where is innovation most needed to improve resilience?' }
+        { id: 'blur', prompt: 'Where do responsibilities blur or overlap in practice?' },
+        { id: 'fails', prompt: 'Where does coordination fail or break down between teams or organisations?' }
       ]
     },
     {
       id: 'p6',
-      name: 'Continually Learning',
-      fullName: 'Continually learning and improving',
+      name: 'Adaptively Transforming',
+      fullName: 'P6 \u2014 Adaptively transforming to changing needs',
       scores: [
-        { id: 'lessons', label: 'Lessons captured', prompt: 'How systematically are lessons from incidents and operations captured and documented?' },
-        { id: 'reviews', label: 'Reviews conducted', prompt: 'How regularly are resilience reviews and post-incident analyses conducted?' },
-        { id: 'feedback', label: 'Feedback loops', prompt: 'How effective are feedback loops in translating lessons into improved practices?' }
+        { id: 'manageable', label: 'Manageable solutions', prompt: 'How well are infrastructure solutions chosen to be manageable given available skills and resources?' },
+        { id: 'capacity', label: 'Adaptive capacity', prompt: 'How effectively is adaptive capacity created and maintained to respond to changing conditions?' },
+        { id: 'flexibility', label: 'Flexible management', prompt: 'How well does management allow for flexibility, transformation, and human discretion in decision-making?' }
       ],
       reflections: [
-        { id: 'notlearned', prompt: 'What lessons are not being captured or acted upon?' },
-        { id: 'sharing', prompt: 'How are lessons and knowledge shared across teams and organisations?' }
+        { id: 'hardest', prompt: 'What is hardest to change in the current system or organisation?' },
+        { id: 'needed', prompt: 'Where is innovation most needed to improve resilience?' }
       ]
     }
   ];

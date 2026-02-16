@@ -11,6 +11,10 @@ update-pages.ps1
 remove-font.ps1
 update-cards.ps1
 update-nav.ps1
+rename-principles.ps1
+
+# Source documents (handbook)
+docs/
 
 # StatiCrypt
 .staticrypt.json
