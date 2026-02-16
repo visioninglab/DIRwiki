@@ -883,6 +883,14 @@
   function init() {
     var resumed = loadState();
 
+    // Don't auto-resume case study views — they're for one-time viewing
+    if (state.mode === 'case-study') {
+      localStorage.removeItem(STORAGE_KEY);
+      state.mode = 'fresh';
+      state.currentStep = 0;
+      state.caseStudy = null;
+    }
+
     // Case study tiles
     renderCaseTiles();
 

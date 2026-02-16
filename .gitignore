@@ -12,6 +12,7 @@ remove-font.ps1
 update-cards.ps1
 update-nav.ps1
 rename-principles.ps1
+update-fonts.ps1
 
 # Source documents (handbook)
 docs/
