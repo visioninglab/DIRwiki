@@ -13,6 +13,9 @@ update-cards.ps1
 update-nav.ps1
 rename-principles.ps1
 update-fonts.ps1
+add-lucide.ps1
+update-icons.ps1
+replace-emojis.ps1
 
 # Source documents (handbook)
 docs/

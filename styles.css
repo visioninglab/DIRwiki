@@ -87,6 +87,8 @@ body {
   font-size: 13px;
   font-weight: 500;
 }
+.topbar-nav a { display: inline-flex; align-items: center; gap: 4px; }
+.topbar-nav svg { width: 14px; height: 14px; flex-shrink: 0; }
 .topbar-nav a {
   color: #fff;
   text-decoration: none;
@@ -340,6 +342,7 @@ body {
   font-size: 16px;
   flex-shrink: 0;
 }
+.section-icon svg { width: 16px; height: 16px; }
 .section-header h2 {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 18px;
@@ -351,7 +354,10 @@ body {
   font-size: 18px;
   color: var(--muted);
   transition: transform 0.25s;
+  display: flex;
+  align-items: center;
 }
+.section-toggle svg { width: 18px; height: 18px; }
 .section.collapsed .section-toggle { transform: rotate(-90deg); }
 .section-body {
   padding: 1.25rem 1.5rem;
@@ -444,6 +450,7 @@ body {
   text-align: center;
   box-shadow: var(--card-shadow);
 }
+.overview-stat-icon { color: var(--accent); margin-bottom: 6px; }
 .overview-stat-num {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 30px;
@@ -706,6 +713,7 @@ body {
   font-size: 16px;
   flex-shrink: 0;
 }
+.about-section-icon svg { width: 16px; height: 16px; }
 .about-section-header h2 {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 18px;
@@ -894,6 +902,7 @@ body {
   font-size: 20px;
   margin-bottom: 0.75rem;
 }
+.principle-card-icon svg { width: 20px; height: 20px; }
 .principle-card-title {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 19px;
@@ -1156,7 +1165,9 @@ body {
 .diag-card-icon {
   font-size: 32px;
   margin-bottom: 1rem;
+  color: var(--accent);
 }
+.diag-card-icon svg { width: 32px; height: 32px; }
 .diag-landing-card h3 {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 20px;
