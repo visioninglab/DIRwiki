@@ -10,6 +10,7 @@ fix-breadcrumbs.ps1
 update-pages.ps1
 remove-font.ps1
 update-cards.ps1
+update-nav.ps1
 
 # StatiCrypt
 .staticrypt.json
