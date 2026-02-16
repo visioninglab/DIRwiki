@@ -1,135 +1,59 @@
 /* ============================================================
-   Resilient Infrastructure Assessment Tool — JavaScript
-   ISO-aligned self-assessment for digitalised infrastructure
+   7-Minute Resilience Diagnostic — JavaScript
+   Quick infrastructure resilience assessment aligned with
+   ISO 22372 and UNDRR Principles for Resilient Infrastructure
    ============================================================ */
 
 (function () {
   'use strict';
 
-  /* ============ EDITABLE SCHEMA ============
-     Modify these objects to change questions, labels, and prompts.
-     The tool UI is generated dynamically from this schema.
-     ========================================== */
+  /* ============ SCHEMA ============ */
 
   var SCORE_LABELS = [
     'Absent', 'Ad hoc', 'Emerging', 'Operational', 'Integrated', 'Adaptive'
   ];
 
   var PRINCIPLES = [
-    {
-      id: 'p1',
-      name: 'Continuously Learning',
-      fullName: 'P1 \u2014 Continuously learning and improving',
-      scores: [
-        { id: 'assumptions', label: 'Assumptions validated', prompt: 'How systematically are assumptions in models, plans and operating systems exposed, tested and reviewed?' },
-        { id: 'monitoring', label: 'Monitoring and intervention', prompt: 'How effectively is infrastructure performance monitored and how timely are interventions when issues arise?' },
-        { id: 'lessons', label: 'Lessons captured', prompt: 'How systematically are lessons from incidents, operations and stress tests captured, analysed and applied?' }
-      ],
-      reflections: [
-        { id: 'notlearned', prompt: 'What lessons are not being captured or acted upon?' },
-        { id: 'sharing', prompt: 'How are lessons and knowledge shared across teams and organisations?' }
-      ]
-    },
-    {
-      id: 'p2',
-      name: 'Proactively Protected',
-      fullName: 'P2 \u2014 Proactively protected by design',
-      scores: [
-        { id: 'safety', label: 'Safety requirements', prompt: 'How well are essential safety requirements raised and maintained across the infrastructure system?' },
-        { id: 'interdependencies', label: 'Interdependency management', prompt: 'How effectively are complex interdependencies between infrastructure systems considered and managed?' },
-        { id: 'emergency', label: 'Emergency preparedness', prompt: 'How well is emergency management embedded, including fail-safe design and long-term maintenance commitments?' }
-      ],
-      reflections: [
-        { id: 'unknown', prompt: 'What are the biggest unknown or under-assessed risks?' },
-        { id: 'surprises', prompt: 'Where have surprises or unexpected failures occurred in the past?' }
-      ]
-    },
-    {
-      id: 'p3',
-      name: 'Environmentally Integrated',
-      fullName: 'P3 \u2014 Environmentally integrated with natural systems',
-      scores: [
-        { id: 'impact', label: 'Environmental impact', prompt: 'How effectively is the environmental impact of infrastructure minimised through design and operation?' },
-        { id: 'solutions', label: 'Environmental solutions', prompt: 'How well are environmental and nature-based solutions used to enhance infrastructure resilience?' },
-        { id: 'ecosystem', label: 'Ecosystem integration', prompt: 'How well is ecosystem information integrated into planning, and are natural systems and local sustainable resources maintained?' }
-      ],
-      reflections: [
-        { id: 'blindspots', prompt: 'What are the environmental blind spots in current planning?' },
-        { id: 'integration', prompt: 'How could environmental data be better integrated into operational decisions?' }
-      ]
-    },
-    {
-      id: 'p4',
-      name: 'Socially Engaged',
-      fullName: 'P4 \u2014 Socially engaged with communities and stakeholders',
-      scores: [
-        { id: 'information', label: 'Disruption information', prompt: 'How effectively are people informed about disruptions and resilience risks?' },
-        { id: 'literacy', label: 'Resilience literacy', prompt: 'How well is resilience literacy raised across communities and stakeholders?' },
-        { id: 'participation', label: 'Community participation', prompt: 'How meaningfully are communities encouraged to participate in infrastructure decision-making?' }
-      ],
-      reflections: [
-        { id: 'missing', prompt: 'Who is missing from current decision-making processes?' },
-        { id: 'influence', prompt: 'How does stakeholder input actually influence outcomes and decisions?' }
-      ]
-    },
-    {
-      id: 'p5',
-      name: 'Shared Responsibility',
-      fullName: 'P5 \u2014 Shared responsibility for coordinated benefits',
-      scores: [
-        { id: 'standards', label: 'Open standards', prompt: 'How well are open standards harmonised to facilitate data sharing across sectors?' },
-        { id: 'collaboration', label: 'Collaborative management', prompt: 'How effectively is collaborative management cultivated with clear accountability across stakeholders?' },
-        { id: 'datasharing', label: 'Data safety and sharing', prompt: 'How well is data safety assured to develop trust, and how transparently is risk-and-return information shared?' }
-      ],
-      reflections: [
-        { id: 'blur', prompt: 'Where do responsibilities blur or overlap in practice?' },
-        { id: 'fails', prompt: 'Where does coordination fail or break down between teams or organisations?' }
-      ]
-    },
-    {
-      id: 'p6',
-      name: 'Adaptively Transforming',
-      fullName: 'P6 \u2014 Adaptively transforming to changing needs',
-      scores: [
-        { id: 'manageable', label: 'Manageable solutions', prompt: 'How well are infrastructure solutions chosen to be manageable given available skills and resources?' },
-        { id: 'capacity', label: 'Adaptive capacity', prompt: 'How effectively is adaptive capacity created and maintained to respond to changing conditions?' },
-        { id: 'flexibility', label: 'Flexible management', prompt: 'How well does management allow for flexibility, transformation, and human discretion in decision-making?' }
-      ],
-      reflections: [
-        { id: 'hardest', prompt: 'What is hardest to change in the current system or organisation?' },
-        { id: 'needed', prompt: 'Where is innovation most needed to improve resilience?' }
-      ]
-    }
+    { id: 'p1', num: 'P1', name: 'Continuously Learning',
+      desc: 'Develop and update understanding and insight into infrastructure resilience through monitoring, analysis and stress testing.' },
+    { id: 'p2', num: 'P2', name: 'Proactively Protected',
+      desc: 'Proactively plan, design, build and operate infrastructure prepared for current and future hazards.' },
+    { id: 'p3', num: 'P3', name: 'Environmentally Integrated',
+      desc: 'Work in a positively integrated way with the natural environment using nature-based solutions.' },
+    { id: 'p4', num: 'P4', name: 'Socially Engaged',
+      desc: 'Develop active engagement, involvement and participation across all levels of society.' },
+    { id: 'p5', num: 'P5', name: 'Shared Responsibility',
+      desc: 'Share information and expertise for coordinated benefits with clear accountability.' },
+    { id: 'p6', num: 'P6', name: 'Adaptively Transforming',
+      desc: 'Adapt and transform infrastructure systems to meet changing needs and conditions.' }
   ];
 
-  var CAPABILITIES = [
-    { id: 'decision', label: 'Decision clarity', prompt: 'How clear and effective are decision-making processes for resilience?' },
-    { id: 'evidence', label: 'Evidence sufficiency', prompt: 'How sufficient is the evidence base for resilience decisions?' },
-    { id: 'datasystems', label: 'Data systems', prompt: 'How adequate are data systems and digital infrastructure for resilience management?' },
-    { id: 'coordination', label: 'Coordination capacity', prompt: 'How effective is coordination across organisational boundaries?' }
-  ];
-
-  var PDCA = [
-    { id: 'plan', label: 'Plan', prompt: 'Are resilience strategies clearly defined and documented?', reflection: 'What gaps exist in current resilience planning?' },
-    { id: 'do', label: 'Do', prompt: 'Are planned resilience actions being implemented effectively?', reflection: 'What barriers prevent effective implementation?' },
-    { id: 'check', label: 'Check', prompt: 'Are resilience systems regularly tested, monitored, and evaluated?', reflection: 'What is not being measured or tested that should be?' },
-    { id: 'act', label: 'Act', prompt: 'Are improvements made based on monitoring and evaluation findings?', reflection: 'What prevents improvement actions from being completed?' }
+  var DECISION_AREAS = [
+    { id: 'strategy', label: 'Strategy', prompt: 'How clear is the strategic direction for resilience?' },
+    { id: 'operations', label: 'Operations', prompt: 'How clear are operational decisions and responsibilities?' },
+    { id: 'investment', label: 'Investment', prompt: 'How evidence-based are investment and funding decisions?' },
+    { id: 'coordination', label: 'Coordination', prompt: 'How effective is cross-boundary coordination?' },
+    { id: 'monitoring', label: 'Monitoring', prompt: 'How systematic is performance monitoring and review?' }
   ];
 
   /* ============ STATE ============ */
+
   var state = {
-    currentStep: 1,
-    currentPrinciple: 0,
-    context: { sector: '', scale: '', systemName: '', role: '' },
-    objectives: { outcomes: [''], responsibilities: [''], stakeholders: [''] },
-    scores: {},
-    confidence: {},
-    reflections: {}
+    mode: 'fresh',
+    caseStudy: null,
+    currentStep: 0,
+    system: { name: '', sector: '', scale: '', role: '' },
+    priorities: { outcomes: ['', '', ''], concerns: [], stakeholders: ['', '', ''] },
+    principleScores: { p1: -1, p2: -1, p3: -1, p4: -1, p5: -1, p6: -1 },
+    principleConfidence: { p1: 'medium', p2: 'medium', p3: 'medium', p4: 'medium', p5: 'medium', p6: 'medium' },
+    principleReflections: {},
+    decisionClarity: { strategy: -1, operations: -1, investment: -1, coordination: -1, monitoring: -1 }
   };
 
   var radarChart = null;
 
   /* ============ UTILITY ============ */
+
   function $(sel) { return document.querySelector(sel); }
   function $$(sel) { return document.querySelectorAll(sel); }
 
@@ -154,27 +78,52 @@
   }
 
   /* ============ NAVIGATION ============ */
+
   function goToStep(n) {
-    if (n < 1 || n > 7) return;
+    if (n < 0 || n > 5) return;
     state.currentStep = n;
 
+    // Show/hide elements
     $$('.assess-step').forEach(function (s) { s.classList.remove('active'); });
     var target = $('#step' + n);
     if (target) target.classList.add('active');
 
-    $$('.assess-progress-step').forEach(function (s) {
-      var sn = parseInt(s.dataset.step);
-      s.classList.remove('active', 'completed');
-      if (sn === n) s.classList.add('active');
-      else if (sn < n) s.classList.add('completed');
-    });
+    var progress = $('#assessProgress');
+    var nav = $('#assessNav');
+    var storage = $('#assessStorage');
 
-    $('#btnPrev').style.display = n === 1 ? 'none' : '';
-    $('#btnNext').textContent = n === 7 ? 'Finish' : 'Next';
-    $('#navStatus').textContent = 'Step ' + n + ' of 7';
+    if (n === 0) {
+      progress.style.display = 'none';
+      nav.style.display = 'none';
+      storage.style.display = 'none';
+    } else {
+      progress.style.display = 'flex';
+      nav.style.display = 'flex';
+      storage.style.display = 'flex';
 
-    if (n === 6) renderResults();
-    if (n === 7) renderExportSummary();
+      // Update progress dots
+      $$('.assess-progress-step').forEach(function (s) {
+        var sn = parseInt(s.dataset.step);
+        s.classList.remove('active', 'completed');
+        if (sn === n) s.classList.add('active');
+        else if (sn < n) s.classList.add('completed');
+      });
+
+      // Prev/Next buttons
+      $('#btnPrev').style.display = n <= 1 ? 'none' : '';
+      if (n === 5) {
+        $('#btnNext').textContent = 'Start Over';
+      } else if (n === 4) {
+        $('#btnNext').textContent = 'View Results';
+      } else {
+        $('#btnNext').textContent = 'Next';
+      }
+      $('#navStatus').textContent = n <= 4 ? 'Step ' + n + ' of 4' : '';
+    }
+
+    if (n === 3) renderPrinciples();
+    if (n === 4) renderDecisions();
+    if (n === 5) renderResults();
 
     saveState();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -182,463 +131,348 @@
 
   function nextStep() {
     collectCurrentStep();
-    if (state.currentStep < 7) goToStep(state.currentStep + 1);
+    if (state.currentStep === 5) {
+      clearProgress();
+      return;
+    }
+    if (state.currentStep < 5) goToStep(state.currentStep + 1);
   }
   window.nextStep = nextStep;
 
   function prevStep() {
     collectCurrentStep();
-    if (state.currentStep > 1) goToStep(state.currentStep - 1);
+    if (state.currentStep === 5 && state.mode === 'case-study') {
+      goToStep(0);
+      return;
+    }
+    if (state.currentStep > 0) goToStep(state.currentStep - 1);
   }
   window.prevStep = prevStep;
 
   function collectCurrentStep() {
     var step = state.currentStep;
     if (step === 1) {
-      state.context.sector = $('#ctxSector').value;
-      state.context.scale = $('#ctxScale').value;
-      state.context.systemName = $('#ctxSystem').value;
-      state.context.role = $('#ctxRole').value;
+      state.system.name = ($('#ctxSystem') || {}).value || '';
+      state.system.sector = ($('#ctxSector') || {}).value || '';
+      state.system.scale = ($('#ctxScale') || {}).value || '';
+      state.system.role = ($('#ctxRole') || {}).value || '';
     }
-    if (step === 2) collectObjectives();
+    if (step === 2) collectPriorities();
   }
 
-  /* ============ STEP 2: OBJECTIVES ============ */
-  function collectObjectives() {
-    ['outcomes', 'responsibilities', 'stakeholders'].forEach(function (key) {
-      var inputs = $$('#' + key + 'List input');
-      state.objectives[key] = [];
-      inputs.forEach(function (inp) {
-        if (inp.value.trim()) state.objectives[key].push(inp.value.trim());
-      });
-      if (state.objectives[key].length === 0) state.objectives[key] = [''];
+  /* ============ LANDING: CASE STUDY TILES ============ */
+
+  function renderCaseTiles() {
+    var container = $('#caseTiles');
+    if (!container || typeof CASE_STUDY_FIXTURES === 'undefined') return;
+
+    container.innerHTML = '';
+    Object.keys(CASE_STUDY_FIXTURES).forEach(function (key) {
+      var cs = CASE_STUDY_FIXTURES[key];
+      var tile = el('button', {
+        className: 'diag-case-tile',
+        onClick: function () { loadCaseStudy(key); }
+      }, [
+        el('span', { className: 'diag-case-tile-title', textContent: cs.title }),
+        el('span', { className: 'diag-case-tile-action', textContent: 'View results \u2192' })
+      ]);
+      container.appendChild(tile);
     });
   }
 
-  function renderObjectivesList(key) {
-    var container = $('#' + key + 'List');
+  function loadCaseStudy(key) {
+    if (typeof CASE_STUDY_FIXTURES === 'undefined') return;
+    var cs = CASE_STUDY_FIXTURES[key];
+    if (!cs) return;
+
+    state.mode = 'case-study';
+    state.caseStudy = key;
+    state.system = Object.assign({}, cs.system);
+    state.priorities = {
+      outcomes: (cs.priorities.outcomes || []).slice(),
+      concerns: (cs.priorities.concerns || []).slice(),
+      stakeholders: (cs.priorities.stakeholders || []).slice()
+    };
+    state.principleScores = Object.assign({}, cs.principleScores);
+    state.principleConfidence = Object.assign({}, cs.principleConfidence);
+    state.principleReflections = Object.assign({}, cs.principleReflections || {});
+    state.decisionClarity = Object.assign({}, cs.decisionClarity);
+
+    goToStep(5);
+  }
+  window.loadCaseStudy = loadCaseStudy;
+
+  function startFresh() {
+    state.mode = 'fresh';
+    state.caseStudy = null;
+    state.system = { name: '', sector: '', scale: '', role: '' };
+    state.priorities = { outcomes: ['', '', ''], concerns: [], stakeholders: ['', '', ''] };
+    state.principleScores = { p1: -1, p2: -1, p3: -1, p4: -1, p5: -1, p6: -1 };
+    state.principleConfidence = { p1: 'medium', p2: 'medium', p3: 'medium', p4: 'medium', p5: 'medium', p6: 'medium' };
+    state.principleReflections = {};
+    state.decisionClarity = { strategy: -1, operations: -1, investment: -1, coordination: -1, monitoring: -1 };
+    goToStep(1);
+  }
+  window.startFresh = startFresh;
+
+  /* ============ STEP 2: PRIORITIES ============ */
+
+  function collectPriorities() {
+    var outcomeInputs = $$('#outcomesList input');
+    state.priorities.outcomes = [];
+    outcomeInputs.forEach(function (inp) {
+      state.priorities.outcomes.push(inp.value.trim());
+    });
+    while (state.priorities.outcomes.length < 3) state.priorities.outcomes.push('');
+
+    state.priorities.concerns = [];
+    $$('#concernsGrid input:checked').forEach(function (cb) {
+      state.priorities.concerns.push(cb.value);
+    });
+
+    var stakeInputs = $$('#stakeholdersList input');
+    state.priorities.stakeholders = [];
+    stakeInputs.forEach(function (inp) {
+      state.priorities.stakeholders.push(inp.value.trim());
+    });
+    while (state.priorities.stakeholders.length < 3) state.priorities.stakeholders.push('');
+  }
+
+  function renderOutcomesList() {
+    var container = $('#outcomesList');
     if (!container) return;
     container.innerHTML = '';
-    state.objectives[key].forEach(function (val, i) {
+    for (var i = 0; i < 3; i++) {
+      var val = state.priorities.outcomes[i] || '';
       var row = el('div', { className: 'assess-list-row' }, [
-        el('input', { type: 'text', value: val, placeholder: 'Enter ' + key.slice(0, -1) + '...' }),
-        el('button', { className: 'assess-remove-btn', textContent: 'Remove', onClick: function () { removeListItem(key, i); } })
+        el('input', { type: 'text', value: val, placeholder: 'Strategic outcome ' + (i + 1) + '\u2026' })
       ]);
+      row.querySelector('input').value = val;
       container.appendChild(row);
+    }
+  }
+
+  function renderStakeholdersList() {
+    var container = $('#stakeholdersList');
+    if (!container) return;
+    container.innerHTML = '';
+    for (var i = 0; i < 3; i++) {
+      var val = state.priorities.stakeholders[i] || '';
+      var row = el('div', { className: 'assess-list-row' }, [
+        el('input', { type: 'text', value: val, placeholder: 'Key stakeholder ' + (i + 1) + '\u2026' })
+      ]);
+      row.querySelector('input').value = val;
+      container.appendChild(row);
+    }
+  }
+
+  function renderConcernsCheckboxes() {
+    var checkboxes = $$('#concernsGrid input');
+    checkboxes.forEach(function (cb) {
+      cb.checked = state.priorities.concerns.indexOf(cb.value) !== -1;
     });
-  }
-
-  function addListItem(key) {
-    collectObjectives();
-    if (state.objectives[key].length >= 5 && key === 'outcomes') return;
-    state.objectives[key].push('');
-    renderObjectivesList(key);
-  }
-  window.addListItem = addListItem;
-
-  function removeListItem(key, idx) {
-    collectObjectives();
-    state.objectives[key].splice(idx, 1);
-    if (state.objectives[key].length === 0) state.objectives[key] = [''];
-    renderObjectivesList(key);
   }
 
   /* ============ STEP 3: PRINCIPLES ============ */
-  function renderPrincipleNav() {
-    var nav = $('#principleNav');
-    if (!nav) return;
-    nav.innerHTML = '';
-    PRINCIPLES.forEach(function (p, i) {
-      var btn = el('button', {
-        className: 'principle-nav-btn' + (i === state.currentPrinciple ? ' active' : ''),
-        textContent: (i + 1) + '. ' + p.name,
-        onClick: function () { switchPrinciple(i); }
+
+  function renderPrinciples() {
+    var container = $('#principlesBody');
+    if (!container) return;
+    container.innerHTML = '';
+
+    PRINCIPLES.forEach(function (p) {
+      var score = state.principleScores[p.id];
+      var conf = state.principleConfidence[p.id] || 'medium';
+      var refl = state.principleReflections[p.id] || '';
+
+      var card = el('div', { className: 'diag-principle-card' });
+
+      // Header
+      card.appendChild(el('div', { className: 'diag-principle-header' }, [
+        el('span', { className: 'diag-principle-num', textContent: p.num }),
+        el('span', { className: 'diag-principle-name', textContent: p.name })
+      ]));
+      card.appendChild(el('p', { className: 'diag-principle-desc', textContent: p.desc }));
+
+      // Score selector
+      var selector = el('div', { className: 'assess-score-selector' });
+      for (var i = 0; i <= 5; i++) {
+        (function (val) {
+          var btn = el('button', {
+            className: 'assess-score-btn' + (val === score ? ' active' : ''),
+            onClick: function () {
+              state.principleScores[p.id] = val;
+              selector.querySelectorAll('.assess-score-btn').forEach(function (b) { b.classList.remove('active'); });
+              btn.classList.add('active');
+              saveState();
+            }
+          }, [
+            el('span', { className: 'assess-score-num', textContent: String(val) }),
+            el('span', { className: 'assess-score-text', textContent: SCORE_LABELS[val] })
+          ]);
+          selector.appendChild(btn);
+        })(i);
+      }
+      card.appendChild(selector);
+
+      // Confidence
+      var confRow = el('div', { className: 'assess-confidence-row' });
+      confRow.appendChild(el('span', { className: 'assess-confidence-label', textContent: 'Confidence:' }));
+      ['high', 'medium', 'low'].forEach(function (level) {
+        var btn = el('button', {
+          className: 'assess-confidence-btn' + (level === conf ? ' active' : '') + ' conf-' + level,
+          textContent: level.charAt(0).toUpperCase() + level.slice(1),
+          onClick: function () {
+            state.principleConfidence[p.id] = level;
+            confRow.querySelectorAll('.assess-confidence-btn').forEach(function (b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            saveState();
+          }
+        });
+        confRow.appendChild(btn);
       });
-      nav.appendChild(btn);
-    });
-  }
+      card.appendChild(confRow);
 
-  function switchPrinciple(idx) {
-    state.currentPrinciple = idx;
-    $$('.principle-nav-btn').forEach(function (b, i) {
-      b.classList.toggle('active', i === idx);
-    });
-    renderPrincipleContent();
-  }
+      // Reflection (optional)
+      var reflToggle = el('button', {
+        className: 'diag-refl-toggle',
+        textContent: refl ? 'Edit reflection \u25BE' : 'Add reflection \u25BE',
+        onClick: function () {
+          var wrap = card.querySelector('.diag-refl-wrap');
+          var isOpen = wrap.style.display !== 'none';
+          wrap.style.display = isOpen ? 'none' : 'block';
+          reflToggle.textContent = isOpen
+            ? (state.principleReflections[p.id] ? 'Edit reflection \u25BE' : 'Add reflection \u25BE')
+            : 'Hide \u25B4';
+        }
+      });
+      card.appendChild(reflToggle);
 
-  function renderPrincipleContent() {
-    var container = $('#principleContent');
-    if (!container) return;
-    container.innerHTML = '';
-
-    var p = PRINCIPLES[state.currentPrinciple];
-
-    var header = el('div', { className: 'assess-principle-header' }, [
-      el('h3', { textContent: p.fullName }),
-      el('span', { className: 'assess-principle-num', textContent: 'Principle ' + (state.currentPrinciple + 1) + ' of 6' })
-    ]);
-    container.appendChild(header);
-
-    // Hard measurement section
-    var hardSection = el('div', { className: 'assess-section-label' }, [
-      el('span', { className: 'assess-section-tag hard', textContent: 'HARD MEASUREMENT' }),
-      el('span', { textContent: ' Scored assessment (0\u20135)' })
-    ]);
-    container.appendChild(hardSection);
-
-    p.scores.forEach(function (s) {
-      container.appendChild(buildScoreItem(p.id + '.' + s.id, s.label, s.prompt));
-    });
-
-    // Soft sensemaking section
-    var softSection = el('div', { className: 'assess-section-label' }, [
-      el('span', { className: 'assess-section-tag soft', textContent: 'SOFT SENSEMAKING' }),
-      el('span', { textContent: ' Reflective assessment' })
-    ]);
-    container.appendChild(softSection);
-
-    p.reflections.forEach(function (r) {
-      container.appendChild(buildReflectionItem(p.id + '.' + r.id, r.prompt));
-    });
-
-    // Principle navigation
-    var pNav = el('div', { className: 'assess-principle-nav' });
-    if (state.currentPrinciple > 0) {
-      pNav.appendChild(el('button', { className: 'assess-nav-btn assess-nav-prev', textContent: 'Previous principle', onClick: function () { switchPrinciple(state.currentPrinciple - 1); } }));
-    }
-    if (state.currentPrinciple < 5) {
-      pNav.appendChild(el('button', { className: 'assess-nav-btn assess-nav-next', textContent: 'Next principle', onClick: function () { switchPrinciple(state.currentPrinciple + 1); } }));
-    }
-    container.appendChild(pNav);
-  }
-
-  /* ============ STEP 4: CAPABILITIES ============ */
-  function renderCapabilities() {
-    var container = $('#capabilityContent');
-    if (!container) return;
-    container.innerHTML = '';
-
-    var hardSection = el('div', { className: 'assess-section-label' }, [
-      el('span', { className: 'assess-section-tag hard', textContent: 'HARD MEASUREMENT' }),
-      el('span', { textContent: ' Scored assessment (0\u20135)' })
-    ]);
-    container.appendChild(hardSection);
-
-    CAPABILITIES.forEach(function (c) {
-      container.appendChild(buildScoreItem('cap.' + c.id, c.label, c.prompt));
-    });
-
-    var softSection = el('div', { className: 'assess-section-label' }, [
-      el('span', { className: 'assess-section-tag soft', textContent: 'SOFT SENSEMAKING' }),
-      el('span', { textContent: ' Reflective assessment' })
-    ]);
-    container.appendChild(softSection);
-
-    container.appendChild(buildReflectionItem('cap.gaps', 'What capability gaps matter most for your infrastructure resilience?'));
-  }
-
-  /* ============ STEP 5: PDCA ============ */
-  function renderPDCA() {
-    var container = $('#pdcaContent');
-    if (!container) return;
-    container.innerHTML = '';
-
-    PDCA.forEach(function (phase) {
-      var card = el('div', { className: 'assess-pdca-card' });
-      card.appendChild(el('h3', { className: 'assess-pdca-label', textContent: phase.label }));
-
-      card.appendChild(el('div', { className: 'assess-section-label' }, [
-        el('span', { className: 'assess-section-tag hard', textContent: 'SCORE' })
-      ]));
-      card.appendChild(buildScoreItem('pdca.' + phase.id, phase.label, phase.prompt));
-
-      card.appendChild(el('div', { className: 'assess-section-label' }, [
-        el('span', { className: 'assess-section-tag soft', textContent: 'REFLECT' })
-      ]));
-      card.appendChild(buildReflectionItem('pdca.' + phase.id, phase.reflection));
+      var reflWrap = el('div', { className: 'diag-refl-wrap' });
+      reflWrap.style.display = refl ? 'block' : 'none';
+      var textarea = el('textarea', {
+        className: 'assess-reflection-input',
+        rows: '2',
+        placeholder: 'Optional: note why you gave this score\u2026'
+      });
+      textarea.value = refl;
+      textarea.addEventListener('input', function () {
+        state.principleReflections[p.id] = textarea.value;
+        saveState();
+      });
+      reflWrap.appendChild(textarea);
+      card.appendChild(reflWrap);
 
       container.appendChild(card);
     });
   }
 
-  /* ============ SCORE & REFLECTION BUILDERS ============ */
-  function buildScoreItem(key, label, prompt) {
-    var currentScore = state.scores[key] != null ? state.scores[key] : -1;
-    var currentConf = state.confidence[key] || 'medium';
+  /* ============ STEP 4: DECISIONS ============ */
 
-    var item = el('div', { className: 'assess-score-item' });
-    item.appendChild(el('div', { className: 'assess-score-label', textContent: label }));
-    item.appendChild(el('div', { className: 'assess-score-prompt', textContent: prompt }));
+  function renderDecisions() {
+    var container = $('#decisionsBody');
+    if (!container) return;
+    container.innerHTML = '';
 
-    // Score buttons
-    var selector = el('div', { className: 'assess-score-selector' });
-    for (var i = 0; i <= 5; i++) {
-      (function (val) {
-        var btn = el('button', {
-          className: 'assess-score-btn' + (val === currentScore ? ' active' : ''),
-          onClick: function () {
-            state.scores[key] = val;
-            selector.querySelectorAll('.assess-score-btn').forEach(function (b) { b.classList.remove('active'); });
-            btn.classList.add('active');
-            saveState();
-          }
-        }, [
-          el('span', { className: 'assess-score-num', textContent: String(val) }),
-          el('span', { className: 'assess-score-text', textContent: SCORE_LABELS[val] })
-        ]);
-        selector.appendChild(btn);
-      })(i);
-    }
-    item.appendChild(selector);
+    DECISION_AREAS.forEach(function (d) {
+      var score = state.decisionClarity[d.id];
 
-    // Confidence selector
-    var confRow = el('div', { className: 'assess-confidence-row' });
-    confRow.appendChild(el('span', { className: 'assess-confidence-label', textContent: 'Confidence:' }));
-    ['high', 'medium', 'low'].forEach(function (level) {
-      var btn = el('button', {
-        className: 'assess-confidence-btn' + (level === currentConf ? ' active' : '') + ' conf-' + level,
-        textContent: level.charAt(0).toUpperCase() + level.slice(1),
-        onClick: function () {
-          state.confidence[key] = level;
-          confRow.querySelectorAll('.assess-confidence-btn').forEach(function (b) { b.classList.remove('active'); });
-          btn.classList.add('active');
-          saveState();
-        }
-      });
-      confRow.appendChild(btn);
+      var card = el('div', { className: 'diag-decision-card' });
+      card.appendChild(el('div', { className: 'diag-decision-label', textContent: d.label }));
+      card.appendChild(el('div', { className: 'diag-decision-prompt', textContent: d.prompt }));
+
+      var selector = el('div', { className: 'assess-score-selector' });
+      for (var i = 0; i <= 5; i++) {
+        (function (val) {
+          var btn = el('button', {
+            className: 'assess-score-btn' + (val === score ? ' active' : ''),
+            onClick: function () {
+              state.decisionClarity[d.id] = val;
+              selector.querySelectorAll('.assess-score-btn').forEach(function (b) { b.classList.remove('active'); });
+              btn.classList.add('active');
+              saveState();
+            }
+          }, [
+            el('span', { className: 'assess-score-num', textContent: String(val) }),
+            el('span', { className: 'assess-score-text', textContent: SCORE_LABELS[val] })
+          ]);
+          selector.appendChild(btn);
+        })(i);
+      }
+      card.appendChild(selector);
+      container.appendChild(card);
     });
-    item.appendChild(confRow);
-
-    return item;
   }
 
-  function buildReflectionItem(key, prompt) {
-    var currentVal = state.reflections[key] || '';
-    var item = el('div', { className: 'assess-reflection-item' });
-    item.appendChild(el('label', { className: 'assess-reflection-label', textContent: prompt }));
-    var textarea = el('textarea', {
-      className: 'assess-reflection-input',
-      rows: '3',
-      placeholder: 'Reflect on your experience\u2026',
-      value: currentVal
-    });
-    textarea.value = currentVal;
-    textarea.addEventListener('input', function () {
-      state.reflections[key] = textarea.value;
-      saveState();
-    });
-    item.appendChild(textarea);
-    return item;
-  }
+  /* ============ STEP 5: RESULTS ============ */
 
-  /* ============ STEP 6: RESULTS ============ */
   function renderResults() {
-    var avgs = calculatePrincipleAverages();
-    var capAvgs = calculateCapabilityAverages();
-    var pdcaAvgs = calculatePDCAAverages();
-    var allScores = avgs.concat(capAvgs, pdcaAvgs);
-    var overallAvg = 0;
-    var count = 0;
-    allScores.forEach(function (v) { if (v > 0) { overallAvg += v; count++; } });
-    overallAvg = count > 0 ? overallAvg / count : 0;
+    // Title
+    if (state.mode === 'case-study' && state.caseStudy) {
+      var cs = CASE_STUDY_FIXTURES[state.caseStudy];
+      $('#resultsTitle').textContent = cs ? cs.title : 'Results';
+      $('#resultsSubtitle').textContent = 'Pre-loaded case study assessment — explore the scores and analysis below.';
 
-    // Radar chart
-    renderRadarChart(avgs);
+      // Case study link
+      var linkCard = $('#caseStudyLink');
+      if (linkCard && cs && cs.link) {
+        linkCard.style.display = 'block';
+        $('#caseStudyLinkText').textContent = 'Read the detailed analysis of ' + cs.title + ' in the case study wiki.';
+        $('#caseStudyLinkHref').href = cs.link;
+      }
+    } else {
+      $('#resultsTitle').textContent = 'Your Resilience Profile';
+      $('#resultsSubtitle').textContent = state.system.name ? 'Assessment for ' + state.system.name : '';
+      var linkCard2 = $('#caseStudyLink');
+      if (linkCard2) linkCard2.style.display = 'none';
+    }
+
+    var scores = getPrincipleScoresArray();
+    var overall = calcOverall(scores);
+    var level = Math.min(Math.round(overall), 5);
+    var pct = Math.round((overall / 5) * 100);
 
     // Maturity
-    var maturityEl = $('#maturityContent');
-    if (maturityEl) {
-      var level = Math.round(overallAvg);
-      var pct = Math.round((overallAvg / 5) * 100);
-      maturityEl.innerHTML = '';
-      maturityEl.appendChild(el('div', { className: 'maturity-score', textContent: overallAvg.toFixed(1) }));
-      maturityEl.appendChild(el('div', { className: 'maturity-label', textContent: SCORE_LABELS[Math.min(level, 5)] }));
-      var bar = el('div', { className: 'maturity-bar' });
-      var fill = el('div', { className: 'maturity-bar-fill' });
-      fill.style.width = pct + '%';
-      bar.appendChild(fill);
-      maturityEl.appendChild(bar);
-      maturityEl.appendChild(el('div', { className: 'maturity-pct', textContent: pct + '% of maximum score' }));
-    }
+    $('#maturityScore').textContent = overall.toFixed(1);
+    $('#maturityLabel').textContent = overall > 0 ? SCORE_LABELS[level] : 'Not assessed';
+    $('#maturityFill').style.width = pct + '%';
+    $('#maturityPct').textContent = pct + '% of maximum';
 
-    // Confidence
-    var confEl = $('#confidenceContent');
-    if (confEl) {
-      confEl.innerHTML = '';
-      var lowConf = [];
-      Object.keys(state.confidence).forEach(function (key) {
-        if (state.confidence[key] === 'low') lowConf.push(key);
-      });
-      if (lowConf.length === 0) {
-        confEl.appendChild(el('p', { className: 'assess-muted', textContent: 'No low-confidence ratings recorded.' }));
-      } else {
-        var ul = el('ul', { className: 'confidence-list' });
-        lowConf.forEach(function (key) {
-          ul.appendChild(el('li', { textContent: formatKey(key) + ' (score: ' + (state.scores[key] != null ? state.scores[key] : 'N/A') + ')' }));
-        });
-        confEl.appendChild(el('p', { textContent: lowConf.length + ' item(s) rated with low confidence:' }));
-        confEl.appendChild(ul);
-      }
-    }
+    // Radar chart
+    renderRadarChart(scores);
 
     // Gaps
-    var gapsEl = $('#gapsContent');
-    if (gapsEl) {
-      gapsEl.innerHTML = '';
-      var gaps = identifyGaps();
-      if (gaps.length === 0) {
-        gapsEl.appendChild(el('p', { className: 'assess-muted', textContent: 'No significant gaps identified (all scores 3 or above).' }));
-      } else {
-        var table = el('table', { className: 'gaps-table' });
-        var thead = el('thead', {}, [
-          el('tr', {}, [
-            el('th', { textContent: 'Area' }),
-            el('th', { textContent: 'Item' }),
-            el('th', { textContent: 'Score' }),
-            el('th', { textContent: 'Level' }),
-            el('th', { textContent: 'Confidence' })
-          ])
-        ]);
-        table.appendChild(thead);
-        var tbody = el('tbody');
-        gaps.forEach(function (g) {
-          tbody.appendChild(el('tr', { className: g.score <= 1 ? 'gap-critical' : '' }, [
-            el('td', { textContent: g.area }),
-            el('td', { textContent: g.item }),
-            el('td', { textContent: String(g.score) }),
-            el('td', { textContent: SCORE_LABELS[g.score] }),
-            el('td', { textContent: g.confidence })
-          ]));
-        });
-        table.appendChild(tbody);
-        gapsEl.appendChild(table);
-      }
-    }
+    renderGaps(scores);
+
+    // PDCA
+    renderPDCA(scores);
+
+    // Decision confidence map
+    renderDecisionMap();
 
     // Suggestions
-    var sugEl = $('#suggestionsContent');
-    if (sugEl) {
-      sugEl.innerHTML = '';
-      var suggestions = generateSuggestions(avgs, capAvgs, pdcaAvgs);
-      var ol = el('ol', { className: 'suggestions-list' });
-      suggestions.forEach(function (s) {
-        ol.appendChild(el('li', {}, [
-          el('strong', { textContent: s.area + ': ' }),
-          document.createTextNode(s.text)
-        ]));
-      });
-      sugEl.appendChild(ol);
-    }
+    renderSuggestions(scores);
   }
 
-  function calculatePrincipleAverages() {
+  function getPrincipleScoresArray() {
     return PRINCIPLES.map(function (p) {
-      var sum = 0; var count = 0;
-      p.scores.forEach(function (s) {
-        var v = state.scores[p.id + '.' + s.id];
-        if (v != null && v >= 0) { sum += v; count++; }
-      });
-      return count > 0 ? sum / count : 0;
-    });
-  }
-
-  function calculateCapabilityAverages() {
-    return CAPABILITIES.map(function (c) {
-      var v = state.scores['cap.' + c.id];
+      var v = state.principleScores[p.id];
       return (v != null && v >= 0) ? v : 0;
     });
   }
 
-  function calculatePDCAAverages() {
-    return PDCA.map(function (p) {
-      var v = state.scores['pdca.' + p.id];
-      return (v != null && v >= 0) ? v : 0;
-    });
+  function calcOverall(scores) {
+    var sum = 0; var count = 0;
+    scores.forEach(function (v) { if (v > 0) { sum += v; count++; } });
+    return count > 0 ? sum / count : 0;
   }
 
-  function identifyGaps() {
-    var gaps = [];
-    PRINCIPLES.forEach(function (p) {
-      p.scores.forEach(function (s) {
-        var key = p.id + '.' + s.id;
-        var score = state.scores[key];
-        if (score != null && score < 3) {
-          gaps.push({ area: p.name, item: s.label, score: score, confidence: state.confidence[key] || 'medium' });
-        }
-      });
-    });
-    CAPABILITIES.forEach(function (c) {
-      var key = 'cap.' + c.id;
-      var score = state.scores[key];
-      if (score != null && score < 3) {
-        gaps.push({ area: 'Capabilities', item: c.label, score: score, confidence: state.confidence[key] || 'medium' });
-      }
-    });
-    PDCA.forEach(function (p) {
-      var key = 'pdca.' + p.id;
-      var score = state.scores[key];
-      if (score != null && score < 3) {
-        gaps.push({ area: 'Operational Cycle', item: p.label, score: score, confidence: state.confidence[key] || 'medium' });
-      }
-    });
-    gaps.sort(function (a, b) { return a.score - b.score; });
-    return gaps;
-  }
-
-  function generateSuggestions(pAvgs, cAvgs, pdcaAvgs) {
-    var suggestions = [];
-
-    PRINCIPLES.forEach(function (p, i) {
-      var avg = pAvgs[i];
-      if (avg < 2) suggestions.push({ area: p.name, text: 'Establish foundational processes and governance for ' + p.fullName.toLowerCase() + '.' });
-      else if (avg < 3) suggestions.push({ area: p.name, text: 'Formalise and strengthen capabilities for ' + p.fullName.toLowerCase() + '.' });
-      else if (avg < 4) suggestions.push({ area: p.name, text: 'Integrate ' + p.fullName.toLowerCase() + ' across organisational systems and processes.' });
-    });
-
-    var capAvg = 0; cAvgs.forEach(function (v) { capAvg += v; }); capAvg /= cAvgs.length || 1;
-    if (capAvg < 3) suggestions.push({ area: 'Capabilities', text: 'Strengthen organisational capabilities, particularly in areas scoring below Operational level.' });
-
-    var pdcaAvg = 0; pdcaAvgs.forEach(function (v) { pdcaAvg += v; }); pdcaAvg /= pdcaAvgs.length || 1;
-    if (pdcaAvg < 3) suggestions.push({ area: 'Operational Cycle', text: 'Develop a more structured Plan-Do-Check-Act cycle for resilience management.' });
-
-    // Low confidence items
-    var lowConf = Object.keys(state.confidence).filter(function (k) { return state.confidence[k] === 'low'; });
-    if (lowConf.length > 0) suggestions.push({ area: 'Confidence', text: 'Verify assessment of ' + lowConf.length + ' low-confidence item(s) through independent review or additional data gathering.' });
-
-    if (suggestions.length === 0) suggestions.push({ area: 'General', text: 'Assessment indicates strong overall resilience maturity. Focus on maintaining performance and sharing practices externally.' });
-
-    return suggestions;
-  }
-
-  function formatKey(key) {
-    var parts = key.split('.');
-    var area = parts[0]; var item = parts[1];
-    if (area.charAt(0) === 'p') {
-      var pIdx = parseInt(area.slice(1)) - 1;
-      var p = PRINCIPLES[pIdx];
-      if (p) {
-        var s = p.scores.find(function (sc) { return sc.id === item; });
-        return p.name + ' \u2014 ' + (s ? s.label : item);
-      }
-    }
-    if (area === 'cap') {
-      var c = CAPABILITIES.find(function (cc) { return cc.id === item; });
-      return 'Capability \u2014 ' + (c ? c.label : item);
-    }
-    if (area === 'pdca') {
-      var pd = PDCA.find(function (pp) { return pp.id === item; });
-      return 'PDCA \u2014 ' + (pd ? pd.label : item);
-    }
-    return key;
-  }
-
-  function renderRadarChart(avgs) {
+  function renderRadarChart(scores) {
     var canvas = $('#radarChart');
     if (!canvas) return;
-
     if (radarChart) radarChart.destroy();
 
-    var labels = PRINCIPLES.map(function (p) { return p.name; });
+    var labels = PRINCIPLES.map(function (p) { return p.num + ' ' + p.name; });
 
     radarChart = new Chart(canvas, {
       type: 'radar',
@@ -646,7 +480,7 @@
         labels: labels,
         datasets: [{
           label: 'Principle Score',
-          data: avgs,
+          data: scores,
           fill: true,
           backgroundColor: 'rgba(0, 101, 189, 0.10)',
           borderColor: 'rgba(0, 101, 189, 0.75)',
@@ -662,45 +496,141 @@
         maintainAspectRatio: true,
         scales: {
           r: {
-            min: 0,
-            max: 5,
+            min: 0, max: 5,
             ticks: { stepSize: 1, font: { size: 11 }, backdropColor: 'transparent' },
-            pointLabels: { font: { size: 12, family: "'DM Sans', sans-serif", weight: '600' }, color: '#1a1a2e' },
+            pointLabels: { font: { size: 11, family: "'DM Sans', sans-serif", weight: '600' }, color: '#1a1a2e' },
             grid: { color: 'rgba(0,0,0,0.06)' },
             angleLines: { color: 'rgba(0,0,0,0.06)' }
           }
         },
-        plugins: {
-          legend: { display: false }
-        }
+        plugins: { legend: { display: false } }
       }
     });
   }
 
-  /* ============ STEP 7: EXPORT ============ */
-  function renderExportSummary() {
-    var container = $('#exportSummary');
+  function renderGaps(scores) {
+    var container = $('#gapsContent');
     if (!container) return;
     container.innerHTML = '';
 
-    var avgs = calculatePrincipleAverages();
-    var overall = 0; var cnt = 0;
-    avgs.forEach(function (v) { if (v > 0) { overall += v; cnt++; } });
-    overall = cnt > 0 ? overall / cnt : 0;
+    var gaps = [];
+    PRINCIPLES.forEach(function (p, i) {
+      if (scores[i] < 3) gaps.push({ name: p.num + ' ' + p.name, score: scores[i], conf: state.principleConfidence[p.id] });
+    });
+    gaps.sort(function (a, b) { return a.score - b.score; });
 
-    container.appendChild(el('div', { className: 'export-summary-card' }, [
-      el('h3', { textContent: 'Assessment Summary' }),
-      el('div', { className: 'export-summary-grid' }, [
-        el('div', {}, [el('strong', { textContent: 'System: ' }), document.createTextNode(state.context.systemName || 'Not specified')]),
-        el('div', {}, [el('strong', { textContent: 'Sector: ' }), document.createTextNode(state.context.sector || 'Not specified')]),
-        el('div', {}, [el('strong', { textContent: 'Scale: ' }), document.createTextNode(state.context.scale || 'Not specified')]),
-        el('div', {}, [el('strong', { textContent: 'Role: ' }), document.createTextNode(state.context.role || 'Not specified')]),
-        el('div', {}, [el('strong', { textContent: 'Overall maturity: ' }), document.createTextNode(overall.toFixed(1) + ' / 5.0 \u2014 ' + SCORE_LABELS[Math.min(Math.round(overall), 5)])]),
-        el('div', {}, [el('strong', { textContent: 'Gaps identified: ' }), document.createTextNode(String(identifyGaps().length))]),
-        el('div', {}, [el('strong', { textContent: 'Date: ' }), document.createTextNode(new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }))])
-      ])
-    ]));
+    if (gaps.length === 0) {
+      container.appendChild(el('p', { className: 'assess-muted', textContent: 'No significant gaps (all scores 3 or above).' }));
+      return;
+    }
+
+    gaps.forEach(function (g) {
+      var row = el('div', { className: 'diag-gap-row' });
+      var color = g.score <= 1 ? '#dc2626' : '#d97706';
+      row.appendChild(el('span', { className: 'diag-gap-dot', style: 'background:' + color }));
+      row.appendChild(el('span', { className: 'diag-gap-name', textContent: g.name }));
+      row.appendChild(el('span', { className: 'diag-gap-score', textContent: g.score + '/5 \u2014 ' + SCORE_LABELS[g.score] }));
+      container.appendChild(row);
+    });
   }
+
+  function renderPDCA(scores) {
+    var container = $('#pdcaContent');
+    if (!container) return;
+    container.innerHTML = '';
+
+    // Derived PDCA: Plan = avg(P1,P5), Do = avg(P2,P3), Check = avg(P1,P4), Act = avg(P5,P6)
+    var pdca = [
+      { label: 'Plan', score: avg(scores[0], scores[4]), desc: 'avg(P1, P5)' },
+      { label: 'Do', score: avg(scores[1], scores[2]), desc: 'avg(P2, P3)' },
+      { label: 'Check', score: avg(scores[0], scores[3]), desc: 'avg(P1, P4)' },
+      { label: 'Act', score: avg(scores[4], scores[5]), desc: 'avg(P5, P6)' }
+    ];
+
+    var grid = el('div', { className: 'diag-pdca-grid' });
+    pdca.forEach(function (p) {
+      var pct = Math.round((p.score / 5) * 100);
+      var color = p.score >= 4 ? '#059669' : p.score >= 3 ? '#0065bd' : p.score >= 2 ? '#d97706' : '#dc2626';
+      var cell = el('div', { className: 'diag-pdca-cell' });
+      cell.appendChild(el('div', { className: 'diag-pdca-label', textContent: p.label }));
+      cell.appendChild(el('div', { className: 'diag-pdca-score', textContent: p.score.toFixed(1) }));
+      var bar = el('div', { className: 'diag-pdca-bar' });
+      var fill = el('div', { className: 'diag-pdca-bar-fill' });
+      fill.style.width = pct + '%';
+      fill.style.background = color;
+      bar.appendChild(fill);
+      cell.appendChild(bar);
+      cell.appendChild(el('div', { className: 'diag-pdca-desc', textContent: p.desc }));
+      grid.appendChild(cell);
+    });
+    container.appendChild(grid);
+  }
+
+  function renderDecisionMap() {
+    var container = $('#decisionMapContent');
+    if (!container) return;
+    container.innerHTML = '';
+
+    DECISION_AREAS.forEach(function (d) {
+      var score = state.decisionClarity[d.id];
+      var val = (score != null && score >= 0) ? score : 0;
+      var color = val >= 4 ? '#059669' : val >= 3 ? '#d97706' : '#dc2626';
+      var label = (score != null && score >= 0) ? SCORE_LABELS[val] : 'Not rated';
+
+      var row = el('div', { className: 'diag-decision-row' });
+      row.appendChild(el('span', { className: 'diag-decision-row-label', textContent: d.label }));
+      var barWrap = el('div', { className: 'diag-decision-bar-wrap' });
+      var bar = el('div', { className: 'diag-decision-bar' });
+      var fill = el('div', { className: 'diag-decision-bar-fill' });
+      fill.style.width = Math.round((val / 5) * 100) + '%';
+      fill.style.background = color;
+      bar.appendChild(fill);
+      barWrap.appendChild(bar);
+      barWrap.appendChild(el('span', { className: 'diag-decision-bar-text', textContent: val + '/5 \u2014 ' + label }));
+      row.appendChild(barWrap);
+      container.appendChild(row);
+    });
+  }
+
+  function renderSuggestions(scores) {
+    var container = $('#suggestionsContent');
+    if (!container) return;
+    container.innerHTML = '';
+
+    var suggestions = [];
+    PRINCIPLES.forEach(function (p, i) {
+      if (scores[i] < 2) suggestions.push({ area: p.num, text: 'Establish foundational processes for ' + p.name.toLowerCase() + '.' });
+      else if (scores[i] < 3) suggestions.push({ area: p.num, text: 'Formalise and strengthen ' + p.name.toLowerCase() + ' capabilities.' });
+      else if (scores[i] < 4) suggestions.push({ area: p.num, text: 'Integrate ' + p.name.toLowerCase() + ' across organisational systems.' });
+    });
+
+    DECISION_AREAS.forEach(function (d) {
+      var v = state.decisionClarity[d.id];
+      if (v >= 0 && v < 3) suggestions.push({ area: d.label, text: 'Improve clarity and effectiveness of ' + d.label.toLowerCase() + ' decisions.' });
+    });
+
+    var lowConf = PRINCIPLES.filter(function (p) { return state.principleConfidence[p.id] === 'low'; });
+    if (lowConf.length > 0) {
+      suggestions.push({ area: 'Confidence', text: 'Verify ' + lowConf.length + ' low-confidence rating(s) through independent review.' });
+    }
+
+    if (suggestions.length === 0) {
+      suggestions.push({ area: 'General', text: 'Strong overall resilience. Focus on maintaining performance and sharing best practices.' });
+    }
+
+    var ol = el('ol', { className: 'suggestions-list' });
+    suggestions.forEach(function (s) {
+      ol.appendChild(el('li', {}, [
+        el('strong', { textContent: s.area + ': ' }),
+        document.createTextNode(s.text)
+      ]));
+    });
+    container.appendChild(ol);
+  }
+
+  function avg(a, b) { return (a + b) / 2; }
+
+  /* ============ EXPORT ============ */
 
   function exportPDF() {
     var jsPDF = window.jspdf.jsPDF;
@@ -709,15 +639,15 @@
     var lm = 20;
     var pw = 170;
 
-    // Title
     doc.setFontSize(18);
     doc.setFont(undefined, 'bold');
-    doc.text('Resilient Infrastructure', lm, y);
+    doc.text('7-Minute Resilience Diagnostic', lm, y);
     y += 8;
-    doc.text('Assessment Report', lm, y);
-    y += 10;
-    doc.setFontSize(10);
+    doc.setFontSize(12);
     doc.setFont(undefined, 'normal');
+    doc.text(state.system.name || 'Infrastructure Assessment', lm, y);
+    y += 8;
+    doc.setFontSize(10);
     doc.setTextColor(100);
     doc.text('Generated ' + new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), lm, y);
     doc.text('Visioning Lab & UKCRIC  |  DEMO', lm + 90, y);
@@ -731,40 +661,26 @@
     // Context
     doc.setFontSize(13);
     doc.setFont(undefined, 'bold');
-    doc.text('1. Context', lm, y); y += 7;
+    doc.text('Context', lm, y); y += 7;
     doc.setFontSize(10);
     doc.setFont(undefined, 'normal');
-    doc.text('System: ' + (state.context.systemName || 'Not specified'), lm + 5, y); y += 5;
-    doc.text('Sector: ' + (state.context.sector || 'Not specified'), lm + 5, y); y += 5;
-    doc.text('Scale: ' + (state.context.scale || 'Not specified'), lm + 5, y); y += 5;
-    doc.text('Role: ' + (state.context.role || 'Not specified'), lm + 5, y); y += 10;
-
-    // Objectives
-    doc.setFontSize(13);
-    doc.setFont(undefined, 'bold');
-    doc.text('2. Objectives', lm, y); y += 7;
-    doc.setFontSize(10);
-    doc.setFont(undefined, 'normal');
-    if (state.objectives.outcomes.filter(Boolean).length > 0) {
-      doc.text('Key outcomes:', lm + 5, y); y += 5;
-      state.objectives.outcomes.filter(Boolean).forEach(function (o) {
-        doc.text('\u2022 ' + o, lm + 10, y); y += 5;
-      });
-    }
-    y += 5;
+    doc.text('System: ' + (state.system.name || 'N/A'), lm + 5, y); y += 5;
+    doc.text('Sector: ' + (state.system.sector || 'N/A'), lm + 5, y); y += 5;
+    doc.text('Scale: ' + (state.system.scale || 'N/A'), lm + 5, y); y += 5;
+    doc.text('Role: ' + (state.system.role || 'N/A'), lm + 5, y); y += 10;
 
     // Principle scores
     doc.setFontSize(13);
     doc.setFont(undefined, 'bold');
-    doc.text('3. Principle Scores', lm, y); y += 7;
+    doc.text('Principle Scores', lm, y); y += 7;
 
-    var avgs = calculatePrincipleAverages();
+    var scores = getPrincipleScoresArray();
     var tableData = PRINCIPLES.map(function (p, i) {
-      return [p.name, avgs[i].toFixed(1), SCORE_LABELS[Math.min(Math.round(avgs[i]), 5)]];
+      return [p.num + ' ' + p.name, String(scores[i]), SCORE_LABELS[Math.min(scores[i], 5)], state.principleConfidence[p.id]];
     });
     doc.autoTable({
       startY: y,
-      head: [['Principle', 'Score', 'Level']],
+      head: [['Principle', 'Score', 'Level', 'Confidence']],
       body: tableData,
       margin: { left: lm },
       styles: { fontSize: 9, cellPadding: 3 },
@@ -781,68 +697,73 @@
         if (y + 90 > 280) { doc.addPage(); y = 20; }
         doc.addImage(imgData, 'PNG', lm + 20, y, 130, 100);
         y += 105;
-      } catch (e) { /* chart image failed, skip */ }
+      } catch (e) { /* skip */ }
     }
 
-    // Gaps
-    if (y + 30 > 280) { doc.addPage(); y = 20; }
+    // Decision clarity
+    if (y + 40 > 280) { doc.addPage(); y = 20; }
     doc.setFontSize(13);
     doc.setFont(undefined, 'bold');
-    doc.text('4. Key Gaps', lm, y); y += 7;
-    var gaps = identifyGaps();
-    if (gaps.length === 0) {
-      doc.setFontSize(10);
-      doc.setFont(undefined, 'normal');
-      doc.text('No significant gaps identified.', lm + 5, y); y += 10;
-    } else {
-      var gapData = gaps.slice(0, 10).map(function (g) {
-        return [g.area, g.item, String(g.score), SCORE_LABELS[g.score], g.confidence];
-      });
-      doc.autoTable({
-        startY: y,
-        head: [['Area', 'Item', 'Score', 'Level', 'Confidence']],
-        body: gapData,
-        margin: { left: lm },
-        styles: { fontSize: 8, cellPadding: 2 },
-        headStyles: { fillColor: [0, 101, 189], textColor: 255 },
-        alternateRowStyles: { fillColor: [245, 243, 240] }
-      });
-      y = doc.lastAutoTable.finalY + 10;
-    }
+    doc.text('Decision Clarity', lm, y); y += 7;
+    var decData = DECISION_AREAS.map(function (d) {
+      var v = state.decisionClarity[d.id];
+      var val = (v >= 0) ? v : 0;
+      return [d.label, String(val), SCORE_LABELS[Math.min(val, 5)]];
+    });
+    doc.autoTable({
+      startY: y,
+      head: [['Area', 'Score', 'Level']],
+      body: decData,
+      margin: { left: lm },
+      styles: { fontSize: 9, cellPadding: 3 },
+      headStyles: { fillColor: [0, 101, 189], textColor: 255 },
+      alternateRowStyles: { fillColor: [245, 243, 240] }
+    });
+    y = doc.lastAutoTable.finalY + 10;
 
     // Suggestions
     if (y + 30 > 280) { doc.addPage(); y = 20; }
     doc.setFontSize(13);
     doc.setFont(undefined, 'bold');
-    doc.text('5. Suggested Actions', lm, y); y += 7;
+    doc.text('Suggested Actions', lm, y); y += 7;
     doc.setFontSize(10);
     doc.setFont(undefined, 'normal');
-    var suggestions = generateSuggestions(avgs, calculateCapabilityAverages(), calculatePDCAAverages());
+
+    var suggestions = [];
+    PRINCIPLES.forEach(function (p, i) {
+      if (scores[i] < 2) suggestions.push(p.num + ': Establish foundational processes for ' + p.name.toLowerCase() + '.');
+      else if (scores[i] < 3) suggestions.push(p.num + ': Formalise ' + p.name.toLowerCase() + ' capabilities.');
+      else if (scores[i] < 4) suggestions.push(p.num + ': Integrate ' + p.name.toLowerCase() + ' across systems.');
+    });
+    if (suggestions.length === 0) suggestions.push('Strong resilience profile. Maintain and share practices.');
+
     suggestions.forEach(function (s, i) {
-      if (y + 10 > 280) { doc.addPage(); y = 20; }
-      var lines = doc.splitTextToSize((i + 1) + '. ' + s.area + ': ' + s.text, pw - 10);
+      if (y + 8 > 280) { doc.addPage(); y = 20; }
+      var lines = doc.splitTextToSize((i + 1) + '. ' + s, pw - 10);
       doc.text(lines, lm + 5, y);
       y += lines.length * 5 + 2;
     });
 
     // Reflections
-    if (y + 20 > 280) { doc.addPage(); y = 20; }
-    y += 5;
-    doc.setFontSize(13);
-    doc.setFont(undefined, 'bold');
-    doc.text('6. Reflection Highlights', lm, y); y += 7;
-    doc.setFontSize(9);
-    doc.setFont(undefined, 'normal');
-    var reflKeys = Object.keys(state.reflections).filter(function (k) { return state.reflections[k] && state.reflections[k].trim(); });
-    if (reflKeys.length === 0) {
-      doc.text('No reflections recorded.', lm + 5, y);
-    } else {
+    var reflKeys = Object.keys(state.principleReflections).filter(function (k) {
+      return state.principleReflections[k] && state.principleReflections[k].trim();
+    });
+    if (reflKeys.length > 0) {
+      if (y + 20 > 280) { doc.addPage(); y = 20; }
+      y += 5;
+      doc.setFontSize(13);
+      doc.setFont(undefined, 'bold');
+      doc.text('Reflections', lm, y); y += 7;
+      doc.setFontSize(9);
+      doc.setFont(undefined, 'normal');
       reflKeys.forEach(function (key) {
         if (y + 15 > 280) { doc.addPage(); y = 20; }
+        var p = PRINCIPLES.find(function (pp) { return pp.id === key; });
+        var label = p ? p.num + ' ' + p.name : key;
         doc.setFont(undefined, 'bold');
-        doc.text(formatKey(key) + ':', lm + 5, y); y += 4;
+        doc.text(label + ':', lm + 5, y); y += 4;
         doc.setFont(undefined, 'normal');
-        var lines = doc.splitTextToSize(state.reflections[key], pw - 15);
+        var lines = doc.splitTextToSize(state.principleReflections[key], pw - 15);
         doc.text(lines, lm + 10, y);
         y += lines.length * 4 + 4;
       });
@@ -854,55 +775,56 @@
       doc.setPage(i);
       doc.setFontSize(8);
       doc.setTextColor(150);
-      doc.text('Resilient Infrastructure Assessment Tool \u2014 Visioning Lab & UKCRIC  |  DEMO', lm, 290);
+      doc.text('7-Minute Resilience Diagnostic \u2014 Visioning Lab & UKCRIC  |  DEMO', lm, 290);
       doc.text('Page ' + i + ' of ' + pageCount, 175, 290);
     }
 
-    doc.save('resilience-assessment-report.pdf');
+    doc.save('resilience-diagnostic-report.pdf');
   }
   window.exportPDF = exportPDF;
 
   function exportJSON() {
+    var scores = getPrincipleScoresArray();
     var data = {
       meta: {
-        tool: 'Resilient Infrastructure Assessment Tool',
-        version: '1.0-demo',
+        tool: '7-Minute Resilience Diagnostic',
+        version: '2.0-demo',
         exported: new Date().toISOString(),
         credit: 'Visioning Lab & UKCRIC'
       },
-      context: state.context,
-      objectives: state.objectives,
-      scores: state.scores,
-      confidence: state.confidence,
-      reflections: state.reflections,
+      mode: state.mode,
+      caseStudy: state.caseStudy,
+      system: state.system,
+      priorities: state.priorities,
+      principleScores: state.principleScores,
+      principleConfidence: state.principleConfidence,
+      principleReflections: state.principleReflections,
+      decisionClarity: state.decisionClarity,
       results: {
-        principleAverages: {},
-        overallMaturity: 0
+        overall: calcOverall(scores),
+        scores: {}
       }
     };
-
-    var avgs = calculatePrincipleAverages();
-    PRINCIPLES.forEach(function (p, i) { data.results.principleAverages[p.id] = avgs[i]; });
-    var sum = 0; avgs.forEach(function (v) { sum += v; });
-    data.results.overallMaturity = avgs.length > 0 ? sum / avgs.length : 0;
+    PRINCIPLES.forEach(function (p, i) { data.results.scores[p.id] = scores[i]; });
 
     var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url;
-    a.download = 'resilience-assessment-data.json';
+    a.download = 'resilience-diagnostic-data.json';
     a.click();
     URL.revokeObjectURL(url);
   }
   window.exportJSON = exportJSON;
 
   /* ============ LOCAL STORAGE ============ */
-  var STORAGE_KEY = 'dir-resilience-assessment';
+
+  var STORAGE_KEY = 'dir-resilience-diagnostic';
 
   function saveState() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch (e) { /* storage full or disabled */ }
+    } catch (e) { /* storage full */ }
   }
 
   function loadState() {
@@ -910,16 +832,18 @@
       var saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         var parsed = JSON.parse(saved);
-        state.currentStep = parsed.currentStep || 1;
-        state.currentPrinciple = parsed.currentPrinciple || 0;
-        state.context = parsed.context || state.context;
-        state.objectives = parsed.objectives || state.objectives;
-        state.scores = parsed.scores || {};
-        state.confidence = parsed.confidence || {};
-        state.reflections = parsed.reflections || {};
+        state.mode = parsed.mode || 'fresh';
+        state.caseStudy = parsed.caseStudy || null;
+        state.currentStep = parsed.currentStep || 0;
+        state.system = parsed.system || state.system;
+        state.priorities = parsed.priorities || state.priorities;
+        state.principleScores = parsed.principleScores || state.principleScores;
+        state.principleConfidence = parsed.principleConfidence || state.principleConfidence;
+        state.principleReflections = parsed.principleReflections || {};
+        state.decisionClarity = parsed.decisionClarity || state.decisionClarity;
         return true;
       }
-    } catch (e) { /* invalid data */ }
+    } catch (e) { /* invalid */ }
     return false;
   }
 
@@ -929,7 +853,7 @@
     var btn = document.querySelector('.assess-storage-btn');
     if (btn) {
       var orig = btn.textContent;
-      btn.textContent = 'Saved';
+      btn.textContent = 'Saved!';
       btn.classList.add('saved');
       setTimeout(function () { btn.textContent = orig; btn.classList.remove('saved'); }, 1500);
     }
@@ -937,47 +861,47 @@
   window.saveProgress = saveProgress;
 
   function clearProgress() {
-    if (!confirm('Clear all assessment data and start over?')) return;
+    if (state.currentStep !== 5 && !confirm('Clear all data and start over?')) return;
     localStorage.removeItem(STORAGE_KEY);
     state = {
-      currentStep: 1,
-      currentPrinciple: 0,
-      context: { sector: '', scale: '', systemName: '', role: '' },
-      objectives: { outcomes: [''], responsibilities: [''], stakeholders: [''] },
-      scores: {},
-      confidence: {},
-      reflections: {}
+      mode: 'fresh',
+      caseStudy: null,
+      currentStep: 0,
+      system: { name: '', sector: '', scale: '', role: '' },
+      priorities: { outcomes: ['', '', ''], concerns: [], stakeholders: ['', '', ''] },
+      principleScores: { p1: -1, p2: -1, p3: -1, p4: -1, p5: -1, p6: -1 },
+      principleConfidence: { p1: 'medium', p2: 'medium', p3: 'medium', p4: 'medium', p5: 'medium', p6: 'medium' },
+      principleReflections: {},
+      decisionClarity: { strategy: -1, operations: -1, investment: -1, coordination: -1, monitoring: -1 }
     };
     init();
   }
   window.clearProgress = clearProgress;
 
   /* ============ INIT ============ */
+
   function init() {
     var resumed = loadState();
 
-    // Populate context fields
-    if (state.context.sector) $('#ctxSector').value = state.context.sector;
-    if (state.context.scale) $('#ctxScale').value = state.context.scale;
-    if (state.context.systemName) $('#ctxSystem').value = state.context.systemName;
-    if (state.context.role) $('#ctxRole').value = state.context.role;
+    // Case study tiles
+    renderCaseTiles();
 
-    // Render objectives
-    ['outcomes', 'responsibilities', 'stakeholders'].forEach(function (key) {
-      renderObjectivesList(key);
-    });
+    // Populate context fields if on step 1
+    if (state.system.name && $('#ctxSystem')) $('#ctxSystem').value = state.system.name;
+    if (state.system.sector && $('#ctxSector')) $('#ctxSector').value = state.system.sector;
+    if (state.system.scale && $('#ctxScale')) $('#ctxScale').value = state.system.scale;
+    if (state.system.role && $('#ctxRole')) $('#ctxRole').value = state.system.role;
 
-    // Render dynamic content
-    renderPrincipleNav();
-    renderPrincipleContent();
-    renderCapabilities();
-    renderPDCA();
+    // Render lists
+    renderOutcomesList();
+    renderStakeholdersList();
+    renderConcernsCheckboxes();
 
     // Go to saved step
     goToStep(state.currentStep);
   }
 
-  if (document.getElementById('assessProgress')) {
+  if (document.getElementById('assessApp')) {
     document.addEventListener('DOMContentLoaded', init);
   }
 
