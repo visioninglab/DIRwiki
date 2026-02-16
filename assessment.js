@@ -36,6 +36,12 @@
     { id: 'monitoring', label: 'Monitoring', prompt: 'How systematic is performance monitoring and review?' }
   ];
 
+  var CONCERN_LABELS = {
+    climate: 'Climate change', flood: 'Flood risk', cyber: 'Cyber security',
+    ageing: 'Ageing assets', interdep: 'Interdependencies', supply: 'Supply chain',
+    social: 'Social equity', funding: 'Funding constraints'
+  };
+
   /* ============ STATE ============ */
 
   var state = {
@@ -75,6 +81,15 @@
       });
     }
     return e;
+  }
+
+  function ucfirst(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+
+  function makeField(label, value) {
+    var f = el('div', { className: 'diag-dx-field' });
+    f.appendChild(el('div', { className: 'diag-dx-field-label', textContent: label }));
+    f.appendChild(el('div', { className: 'diag-dx-field-value', textContent: value || '\u2014' }));
+    return f;
   }
 
   /* ============ NAVIGATION ============ */
@@ -169,136 +184,150 @@
     container.innerHTML = '';
     Object.keys(CASE_STUDY_FIXTURES).forEach(function (key) {
       var cs = CASE_STUDY_FIXTURES[key];
-
-      // Calculate overall score for this case study
-      var scores = PRINCIPLES.map(function (p) {
-        var v = cs.principleScores[p.id];
-        return (v != null && v >= 0) ? v : 0;
-      });
-      var sum = 0; var cnt = 0;
-      scores.forEach(function (v) { if (v > 0) { sum += v; cnt++; } });
-      var overall = cnt > 0 ? sum / cnt : 0;
-
-      var tile = el('div', { className: 'diag-case-tile-card' });
-
-      // Header row: title + score badge
-      var header = el('div', { className: 'diag-case-tile-header' });
-      header.appendChild(el('span', { className: 'diag-case-tile-title', textContent: cs.title }));
-      header.appendChild(el('span', { className: 'diag-case-tile-score', textContent: overall.toFixed(1) + '/5' }));
-      tile.appendChild(header);
-
-      // Scale + sector tag
-      var meta = el('div', { className: 'diag-case-tile-meta' });
-      meta.appendChild(el('span', { textContent: (cs.system.scale || '').charAt(0).toUpperCase() + (cs.system.scale || '').slice(1) + ' \u2022 ' + (cs.system.sector || '').charAt(0).toUpperCase() + (cs.system.sector || '').slice(1) }));
-      tile.appendChild(meta);
-
-      // Mini score bar
-      var barWrap = el('div', { className: 'diag-case-tile-bar' });
-      var barFill = el('div', { className: 'diag-case-tile-bar-fill' });
-      barFill.style.width = Math.round((overall / 5) * 100) + '%';
-      barWrap.appendChild(barFill);
-      tile.appendChild(barWrap);
-
-      // Actions row
-      var actions = el('div', { className: 'diag-case-tile-actions' });
-      var viewBtn = el('button', {
-        className: 'diag-case-tile-btn',
-        textContent: 'View scores \u2192',
+      var tile = el('button', {
+        className: 'diag-case-tile',
         onClick: function () { loadCaseStudy(key); }
-      });
-      actions.appendChild(viewBtn);
-      if (cs.link) {
-        var readLink = el('a', {
-          className: 'diag-case-tile-link',
-          href: cs.link,
-          textContent: 'Read case study'
-        });
-        actions.appendChild(readLink);
-      }
-      tile.appendChild(actions);
-
+      }, [
+        el('span', { className: 'diag-case-tile-title', textContent: cs.title }),
+        el('span', { className: 'diag-case-tile-action', textContent: 'View results \u2192' })
+      ]);
       container.appendChild(tile);
     });
   }
 
-  function renderCaseOverview() {
+  function renderCaseDiagnostics() {
     var container = $('#caseOverview');
     if (!container || typeof CASE_STUDY_FIXTURES === 'undefined') return;
 
     container.innerHTML = '';
 
-    var header = el('div', { className: 'diag-overview-header' });
-    header.appendChild(el('h3', { textContent: 'Case Study Resilience Scores' }));
-    header.appendChild(el('p', { textContent: 'Pre-assessed case studies from the wiki, scored against the six UNDRR principles.' }));
+    var header = el('div', { className: 'diag-dx-header' });
+    header.appendChild(el('h3', { textContent: 'How the Case Studies Answer the Diagnostic' }));
+    header.appendChild(el('p', { textContent: 'See how three water infrastructure case studies complete each step of the 7-minute diagnostic.' }));
     container.appendChild(header);
-
-    var grid = el('div', { className: 'diag-overview-grid' });
 
     Object.keys(CASE_STUDY_FIXTURES).forEach(function (key) {
       var cs = CASE_STUDY_FIXTURES[key];
+      var card = el('div', { className: 'diag-dx-card' });
 
-      // Calculate overall score
-      var scores = PRINCIPLES.map(function (p) {
-        var v = cs.principleScores[p.id];
-        return (v != null && v >= 0) ? v : 0;
+      // Title bar
+      var titleBar = el('div', { className: 'diag-dx-title-bar' });
+      var titleLeft = el('div', { className: 'diag-dx-title-left' });
+      titleLeft.appendChild(el('h4', { textContent: cs.title }));
+      titleLeft.appendChild(el('span', { className: 'diag-dx-meta', textContent: ucfirst(cs.system.scale) + ' \u00b7 ' + ucfirst(cs.system.sector) }));
+      titleBar.appendChild(titleLeft);
+      if (cs.link) {
+        titleBar.appendChild(el('a', { className: 'diag-dx-case-link', href: cs.link, textContent: 'Read case study \u2192' }));
+      }
+      card.appendChild(titleBar);
+
+      var sections = el('div', { className: 'diag-dx-sections' });
+
+      // Step 1: System
+      var s1 = el('div', { className: 'diag-dx-section' });
+      s1.appendChild(el('div', { className: 'diag-dx-step-tag', textContent: 'Step 1 \u2014 System' }));
+      var s1grid = el('div', { className: 'diag-dx-field-grid' });
+      s1grid.appendChild(makeField('System', cs.system.name));
+      s1grid.appendChild(makeField('Sector', ucfirst(cs.system.sector)));
+      s1grid.appendChild(makeField('Scale', ucfirst(cs.system.scale)));
+      s1grid.appendChild(makeField('Role', cs.system.role));
+      s1.appendChild(s1grid);
+      sections.appendChild(s1);
+
+      // Step 2: Priorities
+      var s2 = el('div', { className: 'diag-dx-section' });
+      s2.appendChild(el('div', { className: 'diag-dx-step-tag', textContent: 'Step 2 \u2014 Priorities' }));
+
+      s2.appendChild(el('div', { className: 'diag-dx-sub-label', textContent: 'Strategic Outcomes' }));
+      var ol = el('ol', { className: 'diag-dx-outcomes' });
+      (cs.priorities.outcomes || []).forEach(function (o) {
+        if (o) ol.appendChild(el('li', { textContent: o }));
       });
-      var sum = 0; var cnt = 0;
-      scores.forEach(function (v) { if (v > 0) { sum += v; cnt++; } });
-      var overall = cnt > 0 ? sum / cnt : 0;
-      var level = Math.min(Math.round(overall), 5);
+      s2.appendChild(ol);
 
-      var card = el('div', { className: 'diag-overview-card' });
+      if (cs.priorities.concerns && cs.priorities.concerns.length) {
+        s2.appendChild(el('div', { className: 'diag-dx-sub-label', textContent: 'Key Concerns' }));
+        var tags = el('div', { className: 'diag-dx-tags' });
+        cs.priorities.concerns.forEach(function (c) {
+          tags.appendChild(el('span', { className: 'diag-dx-tag', textContent: CONCERN_LABELS[c] || c }));
+        });
+        s2.appendChild(tags);
+      }
 
-      // Score header
-      var scoreHeader = el('div', { className: 'diag-overview-card-header' });
-      var scoreCircle = el('div', { className: 'diag-overview-score-circle' });
-      scoreCircle.appendChild(el('span', { className: 'diag-overview-score-num', textContent: overall.toFixed(1) }));
-      scoreCircle.appendChild(el('span', { className: 'diag-overview-score-label', textContent: SCORE_LABELS[level] }));
-      scoreHeader.appendChild(scoreCircle);
-      var titleBlock = el('div', { className: 'diag-overview-title-block' });
-      titleBlock.appendChild(el('h4', { textContent: cs.title }));
-      titleBlock.appendChild(el('span', { className: 'diag-overview-meta', textContent: (cs.system.scale || '').charAt(0).toUpperCase() + (cs.system.scale || '').slice(1) + ' \u2022 ' + (cs.system.sector || '').charAt(0).toUpperCase() + (cs.system.sector || '').slice(1) }));
-      scoreHeader.appendChild(titleBlock);
-      card.appendChild(scoreHeader);
-
-      // Principle mini-bars
-      var bars = el('div', { className: 'diag-overview-bars' });
-      PRINCIPLES.forEach(function (p, i) {
-        var pScore = scores[i];
-        var pct = Math.round((pScore / 5) * 100);
-        var row = el('div', { className: 'diag-overview-bar-row' });
-        row.appendChild(el('span', { className: 'diag-overview-bar-label', textContent: p.num }));
-        var barOuter = el('div', { className: 'diag-overview-bar-track' });
-        var barInner = el('div', { className: 'diag-overview-bar-fill' });
-        barInner.style.width = pct + '%';
-        barInner.style.background = pScore >= 4 ? '#059669' : pScore >= 3 ? 'var(--accent)' : pScore >= 2 ? '#d97706' : '#dc2626';
-        barOuter.appendChild(barInner);
-        row.appendChild(barOuter);
-        row.appendChild(el('span', { className: 'diag-overview-bar-val', textContent: pScore + '/5' }));
-        bars.appendChild(row);
+      s2.appendChild(el('div', { className: 'diag-dx-sub-label', textContent: 'Key Stakeholders' }));
+      var sl = el('ul', { className: 'diag-dx-stakeholders' });
+      (cs.priorities.stakeholders || []).forEach(function (s) {
+        if (s) sl.appendChild(el('li', { textContent: s }));
       });
-      card.appendChild(bars);
+      s2.appendChild(sl);
+      sections.appendChild(s2);
 
-      // Actions
-      var actions = el('div', { className: 'diag-overview-actions' });
-      actions.appendChild(el('button', {
-        className: 'diag-overview-btn-primary',
-        textContent: 'View full results \u2192',
+      // Step 3: Principles
+      var s3 = el('div', { className: 'diag-dx-section' });
+      s3.appendChild(el('div', { className: 'diag-dx-step-tag', textContent: 'Step 3 \u2014 Principles' }));
+
+      PRINCIPLES.forEach(function (p) {
+        var score = cs.principleScores[p.id];
+        var conf = cs.principleConfidence ? cs.principleConfidence[p.id] : 'medium';
+        var refl = cs.principleReflections ? cs.principleReflections[p.id] : '';
+
+        var row = el('div', { className: 'diag-dx-principle-row' });
+        var rowHeader = el('div', { className: 'diag-dx-principle-header' });
+        rowHeader.appendChild(el('span', { className: 'diag-dx-p-badge', textContent: p.num }));
+        rowHeader.appendChild(el('span', { className: 'diag-dx-p-name', textContent: p.name }));
+
+        var scoreGroup = el('div', { className: 'diag-dx-p-score-group' });
+        var barWrap = el('div', { className: 'diag-dx-p-bar' });
+        var barFill = el('div', { className: 'diag-dx-p-bar-fill' });
+        barFill.style.width = Math.round((score / 5) * 100) + '%';
+        barFill.style.background = score >= 4 ? '#059669' : score >= 3 ? 'var(--accent)' : score >= 2 ? '#d97706' : '#dc2626';
+        barWrap.appendChild(barFill);
+        scoreGroup.appendChild(barWrap);
+        scoreGroup.appendChild(el('span', { className: 'diag-dx-p-val', textContent: score + '/5' }));
+        scoreGroup.appendChild(el('span', { className: 'diag-dx-p-conf conf-' + conf, textContent: ucfirst(conf) }));
+        rowHeader.appendChild(scoreGroup);
+        row.appendChild(rowHeader);
+
+        if (refl) {
+          row.appendChild(el('div', { className: 'diag-dx-p-reflection', textContent: '\u201c' + refl + '\u201d' }));
+        }
+
+        s3.appendChild(row);
+      });
+      sections.appendChild(s3);
+
+      // Step 4: Decisions
+      var s4 = el('div', { className: 'diag-dx-section' });
+      s4.appendChild(el('div', { className: 'diag-dx-step-tag', textContent: 'Step 4 \u2014 Decisions' }));
+
+      DECISION_AREAS.forEach(function (d) {
+        var score = cs.decisionClarity[d.id];
+        var row = el('div', { className: 'diag-dx-decision-row' });
+        row.appendChild(el('span', { className: 'diag-dx-d-label', textContent: d.label }));
+        var barWrap = el('div', { className: 'diag-dx-d-bar' });
+        var barFill = el('div', { className: 'diag-dx-d-bar-fill' });
+        barFill.style.width = Math.round((score / 5) * 100) + '%';
+        barFill.style.background = score >= 4 ? '#059669' : score >= 3 ? 'var(--accent)' : '#d97706';
+        barWrap.appendChild(barFill);
+        row.appendChild(barWrap);
+        row.appendChild(el('span', { className: 'diag-dx-d-val', textContent: score + '/5 \u2014 ' + SCORE_LABELS[score] }));
+        s4.appendChild(row);
+      });
+      sections.appendChild(s4);
+
+      card.appendChild(sections);
+
+      // Footer with view results button
+      var footer = el('div', { className: 'diag-dx-footer' });
+      footer.appendChild(el('button', {
+        className: 'diag-dx-view-btn',
+        textContent: 'View full results dashboard \u2192',
         onClick: function () { loadCaseStudy(key); }
       }));
-      if (cs.link) {
-        actions.appendChild(el('a', {
-          className: 'diag-overview-btn-secondary',
-          href: cs.link,
-          textContent: 'Read case study'
-        }));
-      }
-      card.appendChild(actions);
+      card.appendChild(footer);
 
-      grid.appendChild(card);
+      container.appendChild(card);
     });
-
-    container.appendChild(grid);
   }
 
   function loadCaseStudy(key) {
@@ -1012,9 +1041,9 @@
       state.caseStudy = null;
     }
 
-    // Case study tiles + overview
+    // Case study tiles + diagnostic walkthrough
     renderCaseTiles();
-    renderCaseOverview();
+    renderCaseDiagnostics();
 
     // Populate context fields if on step 1
     if (state.system.name && $('#ctxSystem')) $('#ctxSystem').value = state.system.name;
