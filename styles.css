@@ -100,7 +100,8 @@ body {
 
 /* === HERO === */
 .hero {
-  background: var(--stallion) url('hero-abstract.jpg') center/cover no-repeat;
+  background: var(--stallion) url('hero-abstract.jpg') right center/contain no-repeat;
+  min-height: 200px;
   padding: 4rem 2rem 3.5rem;
   color: #fff;
   position: relative;
@@ -110,7 +111,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(30,35,48,0.55), rgba(30,35,48,0.35));
+  background: linear-gradient(to right, var(--stallion) 25%, rgba(30,35,48,0.7) 55%, rgba(30,35,48,0.15) 100%);
 }
 .hero-inner {
   max-width: 1100px;
@@ -129,7 +130,7 @@ body {
 .hero-subtitle {
   font-size: 16px;
   opacity: 0.7;
-  max-width: 680px;
+  max-width: 540px;
   line-height: 1.6;
 }
 .hero-accent-line {
@@ -788,7 +789,8 @@ body {
   .stat-bar { grid-template-columns: 1fr; }
   .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
   .stat-item:last-child { border-bottom: none; }
-  .hero { padding: 2rem 1.5rem; }
+  .hero { padding: 2rem 1.5rem; min-height: auto; background-image: none; }
+  .hero::before { background: none; }
   .page-content { padding: 1.5rem 1rem; }
   .overview-stats { grid-template-columns: repeat(2, 1fr); }
   .studies-grid { grid-template-columns: 1fr; }
