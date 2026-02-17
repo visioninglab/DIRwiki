@@ -1031,33 +1031,29 @@
   /* ============ INIT ============ */
 
   function init() {
-    var resumed = loadState();
-
-    // Don't auto-resume case study views — they're for one-time viewing
-    if (state.mode === 'case-study') {
-      localStorage.removeItem(STORAGE_KEY);
-      state.mode = 'fresh';
-      state.currentStep = 0;
-      state.caseStudy = null;
-    }
+    // Always start fresh — blank fields, landing page
+    localStorage.removeItem(STORAGE_KEY);
+    state.mode = 'fresh';
+    state.caseStudy = null;
+    state.currentStep = 0;
+    state.system = { name: '', sector: '', scale: '', role: '' };
+    state.priorities = { outcomes: ['', '', ''], concerns: [], stakeholders: ['', '', ''] };
+    state.principleScores = { p1: -1, p2: -1, p3: -1, p4: -1, p5: -1, p6: -1 };
+    state.principleConfidence = { p1: 'medium', p2: 'medium', p3: 'medium', p4: 'medium', p5: 'medium', p6: 'medium' };
+    state.principleReflections = {};
+    state.decisionClarity = { strategy: -1, operations: -1, investment: -1, coordination: -1, monitoring: -1 };
 
     // Case study tiles + diagnostic walkthrough
     renderCaseTiles();
     renderCaseDiagnostics();
 
-    // Populate context fields if on step 1
-    if (state.system.name && $('#ctxSystem')) $('#ctxSystem').value = state.system.name;
-    if (state.system.sector && $('#ctxSector')) $('#ctxSector').value = state.system.sector;
-    if (state.system.scale && $('#ctxScale')) $('#ctxScale').value = state.system.scale;
-    if (state.system.role && $('#ctxRole')) $('#ctxRole').value = state.system.role;
-
-    // Render lists
+    // Render blank lists
     renderOutcomesList();
     renderStakeholdersList();
     renderConcernsCheckboxes();
 
-    // Go to saved step
-    goToStep(state.currentStep);
+    // Start at landing page
+    goToStep(0);
 
     // Re-render Lucide icons after dynamic content is created
     if (typeof lucide !== 'undefined') {
