@@ -1,47 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Glossary � DIR Case Study Wiki</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<meta name="description" content="Glossary of terms, acronyms, and key concepts used across the DIR Case Study Wiki.">
-<meta property="og:title" content="Glossary � DIR Case Study Wiki">
-<meta property="og:description" content="Glossary of terms, acronyms, and key concepts used across the DIR Case Study Wiki.">
-<meta property="og:type" content="website">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="styles.css?v=4">
-</head>
-<body>
-
-<!-- TOP BAR -->
-<div class="topbar">
-  <div class="topbar-logo">
-    <a href="index.html">
-      <span class="dot"></span>
-      DIR Case Study Wiki
-    </a>
-  </div>
-  <div class="topbar-nav">
-    <a href="index.html"><i data-lucide="book-open" style="width:14px;height:14px;display:inline;vertical-align:-2px;margin-right:4px;"></i>Case Studies</a>
-    <a href="principles.html"><i data-lucide="scale" style="width:14px;height:14px;display:inline;vertical-align:-2px;margin-right:4px;"></i>Principles</a>
-    <a href="glossary.html" class="active"><i data-lucide="bookmark" style="width:14px;height:14px;display:inline;vertical-align:-2px;margin-right:4px;"></i>Glossary</a>
-    <a href="assessment.html"><i data-lucide="clipboard-check" style="width:14px;height:14px;display:inline;vertical-align:-2px;margin-right:4px;"></i>Assessment</a> <a href="about.html"><i data-lucide="info" style="width:14px;height:14px;display:inline;vertical-align:-2px;margin-right:4px;"></i>About</a>
-  </div>
-</div>
-
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-inner">
-    <h1>Glossary</h1>
-    <p class="hero-subtitle">Key terms, acronyms, and concepts used across the DIR Case Study Wiki. Each entry includes cross-references to relevant case studies.</p>
-  </div>
-</div>
-
-<!-- CONTENT -->
-<div class="page-content narrow">
+---
+layout: page
+title: "Glossary"
+description: "Glossary of terms, acronyms, and key concepts used across the DIR Case Study Wiki."
+nav_active: glossary
+hero_title: "Glossary"
+hero_subtitle: "Key terms, acronyms, and concepts used across the DIR Case Study Wiki. Each entry includes cross-references to relevant case studies."
+narrow: true
+footer_text: "DIR Case Study Wiki &bull; Glossary &bull; Last updated February 2026"
+---
 
   <div class="glossary-search">
     <input type="text" id="glossarySearch" placeholder="Search terms, acronyms, or definitions&hellip;" aria-label="Filter glossary terms">
@@ -360,27 +326,3 @@
   <div class="glossary-no-results" id="glossaryNoResults" style="display:none;">
     No matching terms found.
   </div>
-
-</div>
-
-<!-- FOOTER -->
-<div class="footer">
-  DIR Case Study Wiki &bull; Glossary &bull; Last updated February 2026
-</div>
-
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-<script src="script.js?v=3"></script>
-<div id="google_translate_element" class="translate-widget"></div>
-<script>
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({
-    pageLanguage: 'en',
-    includedLanguages: 'en,zh-CN,fr,de,es,ar,ja,ko,pt',
-    layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
-    autoDisplay: false
-  }, 'google_translate_element');
-}
-</script>
-<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-</body>
-</html>

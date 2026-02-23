@@ -1,35 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DIR Case Study Wiki</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<meta name="description" content="DIR Case Study Wiki - Exploring resilience through real-world infrastructure case studies across water, energy, transport, digital, and climate sectors.">
-<meta property="og:title" content="DIR Case Study Wiki">
-<meta property="og:description" content="DIR Case Study Wiki - Exploring resilience through real-world infrastructure case studies across water, energy, transport, digital, and climate sectors.">
-<meta property="og:type" content="website">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="styles.css?v=4">
-</head>
-<body>
-
-<!-- TOP BAR -->
-<div class="topbar">
-  <div class="topbar-logo">
-    <a href="index.html">
-      <span class="dot"></span>
-      DIR Case Study Wiki
-    </a>
-  </div>
-  <div class="topbar-nav">
-    <a href="index.html" class="active"><i data-lucide="book-open" style="width:14px;height:14px;display:inline;vertical-align:-2px;margin-right:4px;"></i>Case Studies</a>
-    <a href="principles.html"><i data-lucide="scale" style="width:14px;height:14px;display:inline;vertical-align:-2px;margin-right:4px;"></i>Principles</a>
-    <a href="glossary.html"><i data-lucide="bookmark" style="width:14px;height:14px;display:inline;vertical-align:-2px;margin-right:4px;"></i>Glossary</a> <a href="assessment.html"><i data-lucide="clipboard-check" style="width:14px;height:14px;display:inline;vertical-align:-2px;margin-right:4px;"></i>Assessment</a> <a href="about.html"><i data-lucide="info" style="width:14px;height:14px;display:inline;vertical-align:-2px;margin-right:4px;"></i>About</a>
-  </div>
-</div>
+---
+layout: default
+title: false
+description: "DIR Case Study Wiki - Exploring resilience through real-world infrastructure case studies across water, energy, transport, digital, and climate sectors."
+nav_active: case-studies
+footer_text: "DIR Case Study Wiki &bull; Resilient Infrastructure Research &bull; Last updated February 2026"
+---
 
 <!-- HERO -->
 <div class="hero">
@@ -46,7 +21,7 @@
   <div class="overview-stats">
     <div class="overview-stat">
       <i data-lucide="book-open" class="overview-stat-icon"></i>
-      <div class="overview-stat-num">10</div>
+      <div class="overview-stat-num">{{ site.case_studies | size }}</div>
       <div class="overview-stat-label">Case Studies</div>
     </div>
     <div class="overview-stat">
@@ -142,187 +117,33 @@
 
   <!-- CASE STUDY CARDS -->
   <div class="studies-grid" id="studiesGrid">
-
-    <!-- Singapore DTSS -->
-    <a href="singapore-dtss.html" class="study-card" data-sector="water" data-hazard="flood" data-location="singapore">
-      <div class="study-card-banner" style="background: linear-gradient(90deg, #0284c7, #0e4d6e);"></div>
+    {% assign studies = site.case_studies | sort: "slug" %}
+    {% for study in studies %}
+    <a href="{{ study.url | relative_url }}" class="study-card" data-sector="{{ study.card.filters.sector }}" data-hazard="{{ study.card.filters.hazard }}" data-location="{{ study.card.filters.location }}">
+      <div class="study-card-banner" style="background: {{ study.card.banner_gradient }};"></div>
       <div class="study-card-body">
-        <div class="study-card-category">Water &bull; Singapore</div>
-        <div class="study-card-title">Deep Tunnel Sewerage System (DTSS)</div>
-        <div class="study-card-desc">National provision of water security through used water reclamation via a deep tunnel sewage system and three water reclamation plants.</div>
+        <div class="study-card-category">{{ study.card.category }}</div>
+        <div class="study-card-title">{{ study.card.short_title }}</div>
+        <div class="study-card-desc">{{ study.card.short_desc }}</div>
         <div class="study-card-tags">
-          <span class="study-card-tag">Water Security</span>
-          <span class="study-card-tag">National Infrastructure</span>
-          <span class="study-card-tag">Digital Twin</span>
-        </div>
-      </div>
-      <div class="study-card-footer">
-        <span>$10B &bull; 206 km &bull; 100-year design life</span>
-        <span class="status"><span class="status-dot active"></span> Published</span>
-      </div>
-    </a>
-
-    <!-- Australia Bridge -->
-    <a href="australia-bridge.html" class="study-card" data-sector="transport" data-hazard="natural flood" data-location="australia">
-      <div class="study-card-banner" style="background: linear-gradient(90deg, #10b981, #059669);"></div>
-      <div class="study-card-body">
-        <div class="study-card-category">Transport &bull; Australia</div>
-        <div class="study-card-title">New Fitzroy River Bridge</div>
-        <div class="study-card-desc">Replacement of critical transport infrastructure to withstand future flooding hazards in the Kimberley Region. Built in 10 months, six times stronger than the original.</div>
-        <div class="study-card-tags">
-          <span class="study-card-tag">Flood Resilience</span>
-          <span class="study-card-tag">Build Back Better</span>
-        </div>
-      </div>
-      <div class="study-card-footer">
-        <span>A$245M &bull; 10 months build &bull; 6x stronger</span>
-        <span class="status"><span class="status-dot active"></span> Published</span>
-      </div>
-    </a>
-
-    <!-- Australia Climate -->
-    <a href="australia-climate.html" class="study-card" data-sector="climate" data-hazard="natural climate flood" data-location="australia">
-      <div class="study-card-banner" style="background: linear-gradient(90deg, #f59e0b, #d97706);"></div>
-      <div class="study-card-body">
-        <div class="study-card-category">Climate &bull; Australia</div>
-        <div class="study-card-title">National Climate Resilience</div>
-        <div class="study-card-desc">National strategy to anticipate, manage and adapt to climate change across all infrastructure sectors, with $5 billion Future Drought Fund.</div>
-        <div class="study-card-tags">
-          <span class="study-card-tag">Climate Resilience</span>
-          <span class="study-card-tag">National Strategy</span>
-        </div>
-      </div>
-      <div class="study-card-footer">
-        <span>A$4.5B/yr claims &bull; $5B Drought Fund</span>
-        <span class="status"><span class="status-dot active"></span> Published</span>
-      </div>
-    </a>
-
-    <!-- China EV Charging -->
-    <a href="china-ev-charging.html" class="study-card" data-sector="energy" data-hazard="natural seismic" data-location="china">
-      <div class="study-card-banner" style="background: linear-gradient(90deg, #f59e0b, #ea580c);"></div>
-      <div class="study-card-body">
-        <div class="study-card-category">Energy &bull; China</div>
-        <div class="study-card-title">EV Charging Infrastructure</div>
-        <div class="study-card-desc">Three-year action plan to build 28 million charging facilities nationwide, supporting 80 million+ electric vehicles by 2027.</div>
-        <div class="study-card-tags">
-          <span class="study-card-tag">Energy Transition</span>
-          <span class="study-card-tag">Smart Charging</span>
-        </div>
-      </div>
-      <div class="study-card-footer">
-        <span>28M facilities &bull; 300M kW capacity by 2027</span>
-        <span class="status"><span class="status-dot active"></span> Published</span>
-      </div>
-    </a>
-
-    <!-- China Hydraulic Engineering -->
-    <a href="china-hydraulic.html" class="study-card" data-sector="water" data-hazard="natural seismic flood" data-location="china">
-      <div class="study-card-banner" style="background: linear-gradient(90deg, #0284c7, #0e4d6e);"></div>
-      <div class="study-card-body">
-        <div class="study-card-category">Water &bull; China</div>
-        <div class="study-card-title">Dujiangyan Irrigation System</div>
-        <div class="study-card-desc">A 2,300-year-old hydraulic engineering masterpiece that controls flooding and provides irrigation without a dam, working with natural forces.</div>
-        <div class="study-card-tags">
-          <span class="study-card-tag">Ancient Infrastructure</span>
-          <span class="study-card-tag">World Heritage</span>
-        </div>
-      </div>
-      <div class="study-card-footer">
-        <span>2,300 years old &bull; Built 256 BC &bull; Still operational</span>
-        <span class="status"><span class="status-dot active"></span> Published</span>
-      </div>
-    </a>
-
-    <!-- China Mega-tall Building -->
-    <a href="china-mega-tall.html" class="study-card" data-sector="built" data-hazard="seismic" data-location="china">
-      <div class="study-card-banner" style="background: linear-gradient(90deg, #6366f1, #4338ca);"></div>
-      <div class="study-card-body">
-        <div class="study-card-category">Built Environment &bull; China</div>
-        <div class="study-card-title">Mega-tall Building Resilience</div>
-        <div class="study-card-desc">Resilience of mega-tall building infrastructure in China, examining structural design, construction, and operational challenges. <em style="color:var(--muted);font-size:12px;">(Content under development)</em></div>
-        <div class="study-card-tags">
-          <span class="study-card-tag">Structural Resilience</span>
+          {% for tag in study.card.tags %}
+          <span class="study-card-tag">{{ tag }}</span>
+          {% endfor %}
+          {% if study.status == "draft" %}
           <span class="study-card-tag" style="background:#fef3c7;color:#92400e;">Draft</span>
+          {% endif %}
         </div>
       </div>
       <div class="study-card-footer">
-        <span>Content under development</span>
+        <span>{{ study.card.footer_text }}</span>
+        {% if study.status == "draft" %}
         <span class="status"><span class="status-dot draft"></span> Draft</span>
-      </div>
-    </a>
-
-    <!-- China Urban Mobility -->
-    <a href="china-urban-mobility.html" class="study-card" data-sector="transport" data-hazard="organisational" data-location="china">
-      <div class="study-card-banner" style="background: linear-gradient(90deg, #10b981, #047857);"></div>
-      <div class="study-card-body">
-        <div class="study-card-category">Transport &bull; China</div>
-        <div class="study-card-title">Shahe Metro Station Urban Mobility</div>
-        <div class="study-card-desc">Smart parking infrastructure addressing congestion at a Beijing metro node serving 95,000 daily passengers, using AI-powered management.</div>
-        <div class="study-card-tags">
-          <span class="study-card-tag">Urban Mobility</span>
-          <span class="study-card-tag">Smart Parking</span>
-        </div>
-      </div>
-      <div class="study-card-footer">
-        <span>95K daily passengers &bull; 10K vehicles &bull; AI-managed</span>
+        {% else %}
         <span class="status"><span class="status-dot active"></span> Published</span>
+        {% endif %}
       </div>
     </a>
-
-    <!-- Europe CyberSecurity -->
-    <a href="europe-cybersecurity.html" class="study-card" data-sector="digital" data-hazard="cyber" data-location="eu">
-      <div class="study-card-banner" style="background: linear-gradient(90deg, #8b5cf6, #6d28d9);"></div>
-      <div class="study-card-body">
-        <div class="study-card-category">Digital &bull; European Union</div>
-        <div class="study-card-title">CyberSecurity for Critical Infrastructure</div>
-        <div class="study-card-desc">NIS2 and CER directives to protect critical entities and network systems from cyber threats across all EU member states.</div>
-        <div class="study-card-tags">
-          <span class="study-card-tag">CyberSecurity</span>
-          <span class="study-card-tag">NIS2 Directive</span>
-        </div>
-      </div>
-      <div class="study-card-footer">
-        <span>&euro;31.2B/yr NIS2 cost &bull; 27 member states</span>
-        <span class="status"><span class="status-dot active"></span> Published</span>
-      </div>
-    </a>
-
-    <!-- USA Broward County -->
-    <a href="usa-broward-county.html" class="study-card" data-sector="climate" data-hazard="natural climate flood" data-location="usa">
-      <div class="study-card-banner" style="background: linear-gradient(90deg, #f59e0b, #dc2626);"></div>
-      <div class="study-card-body">
-        <div class="study-card-category">Climate &bull; USA</div>
-        <div class="study-card-title">Broward County Resilience Plan</div>
-        <div class="study-card-desc">County-wide resilience strategy for flood and heat risk in South Florida, with cost-benefit analysis and portfolio financing approach.</div>
-        <div class="study-card-tags">
-          <span class="study-card-tag">Flood Resilience</span>
-          <span class="study-card-tag">Municipal Finance</span>
-        </div>
-      </div>
-      <div class="study-card-footer">
-        <span>1-in-1000yr event &bull; 9%+ projected ROI</span>
-        <span class="status"><span class="status-dot active"></span> Published</span>
-      </div>
-    </a>
-
-    <!-- USA Challenger -->
-    <a href="usa-challenger.html" class="study-card" data-sector="space" data-hazard="organisational natural" data-location="usa">
-      <div class="study-card-banner" style="background: linear-gradient(90deg, #1e293b, #475569);"></div>
-      <div class="study-card-body">
-        <div class="study-card-category">Space &bull; USA</div>
-        <div class="study-card-title">Space Shuttle Challenger Disaster</div>
-        <div class="study-card-desc">Analysis of organisational decision-making failures and communication breakdowns in the 1986 Challenger disaster.</div>
-        <div class="study-card-tags">
-          <span class="study-card-tag">Disaster Analysis</span>
-          <span class="study-card-tag">Risk Management</span>
-        </div>
-      </div>
-      <div class="study-card-footer">
-        <span>$209B+ programme cost &bull; 135 missions</span>
-        <span class="status"><span class="status-dot active"></span> Published</span>
-      </div>
-    </a>
+    {% endfor %}
 
     <!-- No Results -->
     <div class="no-results" id="noResults">
@@ -332,25 +153,3 @@
 
   </div>
 </div>
-
-<!-- FOOTER -->
-<div class="footer">
-  DIR Case Study Wiki &bull; Resilient Infrastructure Research &bull; Last updated February 2026
-</div>
-
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-<script src="script.js?v=3"></script>
-<div id="google_translate_element" class="translate-widget"></div>
-<script>
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({
-    pageLanguage: 'en',
-    includedLanguages: 'en,zh-CN,fr,de,es,ar,ja,ko,pt',
-    layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
-    autoDisplay: false
-  }, 'google_translate_element');
-}
-</script>
-<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-</body>
-</html>
