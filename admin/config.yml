@@ -1,20 +1,23 @@
 # ============================================================
-# Decap CMS Configuration — DIR Case Study Wiki
+# Sveltia CMS Configuration — DIR Case Study Wiki
 # ============================================================
-# Authentication: GitHub OAuth
+# Sveltia CMS is a Decap CMS-compatible editor with native
+# GitHub PKCE support (no external OAuth proxy needed).
+#
+# Setup:
 #   1. Register a GitHub OAuth App at https://github.com/settings/developers
-#   2. Set "Authorization callback URL" to:
-#      https://visioninglab.github.io/DIRwiki/admin/
-#   3. Copy the Client ID into the "app_id" field below
-#   4. For GitHub Pages (no server), you also need an OAuth proxy.
-#      See https://decapcms.org/docs/external-oauth-clients/
+#      - Application name: DIR Wiki CMS
+#      - Homepage URL: https://visioninglab.github.io/DIRwiki/
+#      - Authorization callback URL: https://visioninglab.github.io/DIRwiki/admin/
+#   2. Copy the Client ID into the "app_id" field below
 # ============================================================
 
 backend:
   name: github
   repo: visioninglab/DIRwiki
   branch: master
-  # app_id: <YOUR_GITHUB_OAUTH_APP_CLIENT_ID>
+  auth_type: pkce
+  app_id: Ov23liv8hsOrJoDVvert
 
 publish_mode: editorial_workflow
 
