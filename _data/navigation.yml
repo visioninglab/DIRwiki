@@ -8,15 +8,20 @@
   icon: "scale"
   id: "principles"
 
-- label: "Glossary"
-  url: "/glossary.html"
-  icon: "bookmark"
-  id: "glossary"
+- label: "Water Quality"
+  url: "/water-quality.html"
+  icon: "droplets"
+  id: "water-quality"
 
 - label: "Assessment"
   url: "/assessment.html"
   icon: "clipboard-check"
   id: "assessment"
+
+- label: "Glossary"
+  url: "/glossary.html"
+  icon: "bookmark"
+  id: "glossary"
 
 - label: "About"
   url: "/about.html"
