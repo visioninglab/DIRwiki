@@ -661,18 +661,6 @@
       "timeMessageChanged": "2026-03-03T11:43:00"
     },
     {
-      "id": "055FWFPT2W01",
-      "severity": 2,
-      "severityLabel": "Flood warning",
-      "area": "055FWFPT2W01",
-      "areaId": "055FWFPT2W01",
-      "county": "Cambridgeshire, Peterborough",
-      "message": "High river levels are expected to continue to cause flooding on 8th March 2026. River levels remain high following recent rainfall. The Whittlesey Wash flood storage reservoir is being operated to protect nearby communities from flooding. Levels in the flood storage reservoir remain high and there is continued flooding of the B1040 road. Whilst the Flood Warning is in force, the Local Authority may close the B1040 for safety reasons. Diversionary routes will be put in place and further updates will be available through local media. We are closely monitoring the situation. Refer to the local authority website for road closures. This message will be updated by 5pm on 9th March 2026, or as the situation changes.\n",
-      "timeRaised": "2026-03-08T17:44:56",
-      "timeSeverityChanged": "2026-02-07T16:52:00",
-      "timeMessageChanged": "2026-03-08T17:44:00"
-    },
-    {
       "id": "111FWGBOU1",
       "severity": 2,
       "severityLabel": "Flood warning",
@@ -794,8 +782,8 @@
     }
   ],
   "meta": {
-    "fetched": "2026-03-09T12:25:00.757Z",
-    "count": 66,
+    "fetched": "2026-03-09T14:28:10.651Z",
+    "count": 65,
     "source": "EA Flood Monitoring API v0.9"
   }
 }
