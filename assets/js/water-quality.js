@@ -135,7 +135,6 @@
   // --- Render All ---
   function renderAll() {
     updateFreshnessBar();
-    renderFloodWarnings();
     initMap();
     populateCatchmentFilter();
     applyFilters();
