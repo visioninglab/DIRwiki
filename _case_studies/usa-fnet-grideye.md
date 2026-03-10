@@ -28,7 +28,7 @@ stats:
 infobox:
   title: "Quick Facts &mdash; FNET/GridEye"
   items:
-    - { label: "Last reviewed", value: "March 2026" }
+    - { label: "Last reviewed", value: "March 2026 (RQ)" }
     - { label: "Infrastructure", value: "Energy &mdash; FNET/GridEye" }
     - { label: "Focus", value: "Wide-area frequency monitoring" }
     - { label: "Owner", value: "Academic-industry collaboration" }
