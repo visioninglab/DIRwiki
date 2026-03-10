@@ -8,16 +8,6 @@
   icon: "scale"
   id: "principles"
 
-- label: "Water Quality"
-  url: "/water-quality.html"
-  icon: "droplets"
-  id: "water-quality"
-
-- label: "Assessment"
-  url: "/assessment.html"
-  icon: "clipboard-check"
-  id: "assessment"
-
 - label: "Glossary"
   url: "/glossary.html"
   icon: "bookmark"
