@@ -89,7 +89,7 @@ sections:
   - id: principles
     type: principles
     assessments:
-      - principle: "Shared Responsibility (P5)"
+      - principle: "Clearly Defined Accountabilities and Shared Responsibilities (P1)"
         status: todo
         content: "NCRAS identifies a principle of &ldquo;Shared responsibility&rdquo; but is not explicit on accountability, coordination or investment for better climate resilience."
       - principle: "Proactively Protected (P2)"
@@ -101,10 +101,10 @@ sections:
       - principle: "Socially Engaged (P4)"
         status: todo
         content: "NCRAS advocates collaborative, values-based choices and aims to assist the vulnerable. The plan to do this is not explicit."
-      - principle: "Adaptively Transforming (P6)"
+      - principle: "Adaptively Transforming (P5)"
         status: todo
         content: "Details pending."
-      - principle: "Continuously Learning (P1)"
+      - principle: "Continually Learning and Improving (P6)"
         status: done
         content: "NCRAS identifies the need to revisit decisions and outcomes over time."
 
