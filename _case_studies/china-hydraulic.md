@@ -27,7 +27,7 @@ stats:
 infobox:
   title: "Quick Facts &mdash; Dujiangyan Irrigation System"
   items:
-    - { label: "Last reviewed", value: "February 2026" }
+    - { label: "Last reviewed", value: "February 2026 (LV)" }
     - { label: "Infrastructure", value: "Hydraulic engineering &mdash; natural water system control" }
     - { label: "Focus", value: "Dujiangyan Irrigation System" }
     - { label: "Resilience Type", value: "Natural water control without using a dam" }
