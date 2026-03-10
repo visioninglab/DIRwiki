@@ -86,9 +86,9 @@ sections:
   - id: principles
     type: principles
     assessments:
-      - principle: "Continuously Learning (P1)"
+      - principle: "Clearly Defined Accountabilities and Shared Responsibilities (P1)"
         status: done
-        content: "Post-event analysis and disturbance archival enable continuous learning about grid behaviour, failure modes, and system dynamics over time."
+        content: "Academic-industry collaboration model enables shared development and knowledge exchange between universities, utilities, and government."
       - principle: "Proactively Protected (P2)"
         status: done
         content: "Early detection of abnormal frequency dynamics enables faster situational awareness and response to emerging grid disturbances."
@@ -98,12 +98,12 @@ sections:
       - principle: "Socially Engaged (P4)"
         status: todo
         content: "Public engagement dimensions of grid monitoring and resilience are areas for further development."
-      - principle: "Shared Responsibility (P5)"
-        status: done
-        content: "Academic-industry collaboration model enables shared development and knowledge exchange between universities, utilities, and government."
-      - principle: "Adaptively Transforming (P6)"
+      - principle: "Adaptively Transforming (P5)"
         status: done
         content: "Low-cost sensor innovation enables wider coverage and democratises grid monitoring capability, supporting adaptive expansion as grid conditions evolve."
+      - principle: "Continually Learning and Improving (P6)"
+        status: done
+        content: "Post-event analysis and disturbance archival enable continuous learning about grid behaviour, failure modes, and system dynamics over time."
 
   - id: futures
     content: |
