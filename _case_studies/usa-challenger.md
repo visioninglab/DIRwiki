@@ -89,7 +89,7 @@ sections:
   - id: principles
     type: principles
     assessments:
-      - principle: "Shared Responsibility (P5)"
+      - principle: "Clearly Defined Accountabilities and Shared Responsibilities (P1)"
         status: done
         content: "Critical organisational failures identified. No precedent for a contractor to recommend NASA not launch. No precedent for engineers to argue from intuitions rather than data, or for temperature to be cited as a variable. Top management&rsquo;s insistence on explicit arguments silenced tacit reservations. Organisational routines &ldquo;camouflaged a cumulative directionality&rdquo; in signals that O-rings were failing."
       - principle: "Proactively Protected (P2)"
@@ -101,10 +101,10 @@ sections:
       - principle: "Socially Engaged (P4)"
         status: done
         content: "Public curiosity about space and appreciation of high risks of space exploration."
-      - principle: "Adaptively Transforming (P6)"
+      - principle: "Adaptively Transforming (P5)"
         status: done
         content: "Key failures: Engineers hadn&rsquo;t dealt with cold conditions before; managers needed reason NOT to launch; engineers gave up trying to convince managers; cascade effect to entire shuttle programme. Similar failures with Columbia &mdash; managers lacked engineering appreciation to connect risks. Critical question: who is the risk management owner?"
-      - principle: "Continuously Learning (P1)"
+      - principle: "Continually Learning and Improving (P6)"
         status: done
         content: "Columbia disaster (2003): insulating foam struck left wing during launch, weakening thermal protection. On re-entry, superheated air penetrated the wing causing breakup. Both mechanical and organisational causes needed addressing. The organisational failures of Challenger were repeated with Columbia."
 
