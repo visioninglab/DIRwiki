@@ -90,9 +90,9 @@ sections:
   - id: principles
     type: principles
     assessments:
-      - principle: "Continuously Learning (P1)"
+      - principle: "Clearly Defined Accountabilities and Shared Responsibilities (P1)"
         status: done
-        content: "WAMPAC systems provide real-time state estimation and continuous stability assessment, creating a persistent feedback loop that enables operators to learn from grid behaviour patterns and refine response strategies."
+        content: "WAMPAC inherently requires cross-organisational coordination between regional transmission operators, with shared data protocols, common standards, and mutual reliance on collective situational awareness."
       - principle: "Proactively Protected (P2)"
         status: done
         content: "Automated protection actions including controlled islanding and adaptive load shedding prevent cascading failures before they propagate across interconnected networks."
@@ -102,12 +102,12 @@ sections:
       - principle: "Socially Engaged (P4)"
         status: todo
         content: "Details pending."
-      - principle: "Shared Responsibility (P5)"
-        status: done
-        content: "WAMPAC inherently requires cross-organisational coordination between regional transmission operators, with shared data protocols, common standards, and mutual reliance on collective situational awareness."
-      - principle: "Adaptively Transforming (P6)"
+      - principle: "Adaptively Transforming (P5)"
         status: done
         content: "WAMPAC represents a shift from reactive to proactive resilience &mdash; anticipating and arresting cascading instabilities rather than responding after failures have propagated."
+      - principle: "Continually Learning and Improving (P6)"
+        status: done
+        content: "WAMPAC systems provide real-time state estimation and continuous stability assessment, creating a persistent feedback loop that enables operators to learn from grid behaviour patterns and refine response strategies."
 
   - id: futures
     content: |
