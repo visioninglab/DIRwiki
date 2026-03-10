@@ -27,7 +27,7 @@ stats:
 infobox:
   title: "Quick Facts &mdash; Singapore DTSS"
   items:
-    - { label: "Last reviewed", value: "February 2026" }
+    - { label: "Last reviewed", value: "February 2026 (LV)" }
     - { label: "Infrastructure", value: "Country: Autonomous Territory" }
     - { label: "Focus", value: "Water security for a nation with a population of over 6 million" }
     - { label: "Resilience Type", value: "National provision of water security through used water reclamation via DTSS" }
