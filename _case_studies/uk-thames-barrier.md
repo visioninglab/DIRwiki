@@ -97,9 +97,9 @@ sections:
   - id: principles
     type: principles
     assessments:
-      - principle: "Continuously Learning (P1)"
+      - principle: "Clearly Defined Accountabilities and Shared Responsibilities (P1)"
         status: done
-        content: "The TE2100 Plan is a landmark example of adaptive management, embedding continuous learning into long-term infrastructure planning. Closure data, tidal monitoring, and climate projections are systematically reviewed to update decision pathways. Progressive digitalisation from mechanical controls to SCADA and data-driven surge forecasting reflects institutional commitment to evidence-based operation."
+        content: "The Thames Barrier operates within a national governance framework. The Environment Agency provides operational management on behalf of Defra, coordinating with the Greater London Authority, Port of London Authority, riparian boroughs, and emergency services. The TE2100 Plan was developed through multi-stakeholder collaboration and is subject to periodic review involving multiple government and non-government bodies."
       - principle: "Proactively Protected (P2)"
         status: done
         content: "The Barrier was conceived and built as a proactive defence against tidal surge flooding following the 1953 disaster. Its 10 rotating steel gates can be raised in advance of predicted surges, providing anticipatory protection. The TE2100 Plan extends this proactive stance across a 100-year planning horizon."
@@ -109,12 +109,12 @@ sections:
       - principle: "Socially Engaged (P4)"
         status: todo
         content: "Limited direct evidence of community engagement in source material. The Barrier is a nationally significant asset with a public information centre, but details of ongoing social engagement programmes require further investigation."
-      - principle: "Shared Responsibility (P5)"
-        status: done
-        content: "The Thames Barrier operates within a national governance framework. The Environment Agency provides operational management on behalf of Defra, coordinating with the Greater London Authority, Port of London Authority, riparian boroughs, and emergency services. The TE2100 Plan was developed through multi-stakeholder collaboration and is subject to periodic review involving multiple government and non-government bodies."
-      - principle: "Adaptively Transforming (P6)"
+      - principle: "Adaptively Transforming (P5)"
         status: done
         content: "The Barrier exemplifies adaptive transformation: evolving from mechanical to digital control systems, expanding its role from tidal-only to combined tidal-fluvial flood management, and sitting at the centre of the TE2100 adaptive pathways approach. The Plan explicitly sequences future decisions — including potential replacement or augmentation of the Barrier — based on observed sea level rise thresholds."
+      - principle: "Continually Learning and Improving (P6)"
+        status: done
+        content: "The TE2100 Plan is a landmark example of adaptive management, embedding continuous learning into long-term infrastructure planning. Closure data, tidal monitoring, and climate projections are systematically reviewed to update decision pathways. Progressive digitalisation from mechanical controls to SCADA and data-driven surge forecasting reflects institutional commitment to evidence-based operation."
 
   - id: futures
     content: |
