@@ -28,7 +28,7 @@ stats:
 infobox:
   title: "Quick Facts &mdash; Shahe Metro Station"
   items:
-    - { label: "Last reviewed", value: "March 2026" }
+    - { label: "Last reviewed", value: "March 2026 (RQ)" }
     - { label: "Infrastructure", value: "Transport &mdash; Shahe Metro Station" }
     - { label: "Focus", value: "Non-motorised vehicle parking management" }
     - { label: "Owner", value: "Beijing district authorities" }
