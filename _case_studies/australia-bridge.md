@@ -88,7 +88,7 @@ sections:
   - id: principles
     type: principles
     assessments:
-      - principle: "Shared Responsibility (P5)"
+      - principle: "Clearly Defined Accountabilities and Shared Responsibilities (P1)"
         status: done
         content: "Governance framework and disaster recovery guiding principles established as part of a resilience plan for Kimberley floods. Key elements: Understand the CONTEXT; Recognise COMPLEXITY; Use COMMUNITY-LED approaches; Local leadership, empowerment and engagement; 'Do No Harm' — avoid negative impacts; Engagement with Aboriginal people and Prescribed Bodies Corporates with free, prior and informed consent; COORDINATE all approaches; COMMUNICATE effectively; Recognise and build CAPACITY; Build back better."
       - principle: "Proactively Protected (P2)"
@@ -100,10 +100,10 @@ sections:
       - principle: "Socially Engaged (P4)"
         status: done
         content: "Community-centred approach with culturally appropriate engagement and Aboriginal community involvement."
-      - principle: "Adaptively Transforming (P6)"
+      - principle: "Adaptively Transforming (P5)"
         status: done
         content: "Build capacity through regional economic benefits and employment outcomes."
-      - principle: "Continuously Learning (P1)"
+      - principle: "Continually Learning and Improving (P6)"
         status: todo
         content: "Details pending."
 
