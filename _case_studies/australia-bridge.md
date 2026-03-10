@@ -27,7 +27,7 @@ stats:
 infobox:
   title: "Quick Facts &mdash; New Fitzroy River Bridge"
   items:
-    - { label: "Last reviewed", value: "February 2026" }
+    - { label: "Last reviewed", value: "February 2026 (LV)" }
     - { label: "Infrastructure", value: "Transport &mdash; New Fitzroy River Bridge" }
     - { label: "Focus", value: "Build critical infrastructure to withstand future flooding and precipitation hazards" }
     - { label: "Resilience Type", value: "Replacement of existing infrastructure with new infrastructure; cyclone deemed a 1-in-100-year event" }
