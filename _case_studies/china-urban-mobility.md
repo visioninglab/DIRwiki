@@ -27,7 +27,7 @@ stats:
 infobox:
   title: "Quick Facts &mdash; Shahe Metro Station"
   items:
-    - { label: "Last reviewed", value: "February 2026" }
+    - { label: "Last reviewed", value: "February 2026 (LV)" }
     - { label: "Infrastructure", value: "Transport &mdash; multi-level car park for urban metro" }
     - { label: "Focus", value: "Enabling metro station to safely accommodate maximum urban demand" }
     - { label: "Resilience Type", value: "New four-storey car park for e-bicycles, e-scooters and e-cars" }
