@@ -28,7 +28,7 @@ stats:
 infobox:
   title: "Quick Facts &mdash; WAMPAC Systems"
   items:
-    - { label: "Last reviewed", value: "March 2026" }
+    - { label: "Last reviewed", value: "March 2026 (RQ)" }
     - { label: "Infrastructure", value: "Energy &mdash; WAMPAC Systems" }
     - { label: "Focus", value: "Wide-area grid monitoring, protection and control" }
     - { label: "Operators", value: "Transmission system operators (multi-region)" }
