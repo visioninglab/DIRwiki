@@ -27,7 +27,7 @@ stats:
 infobox:
   title: "Quick Facts &mdash; Broward County"
   items:
-    - { label: "Last reviewed", value: "February 2026" }
+    - { label: "Last reviewed", value: "February 2026 (LV)" }
     - { label: "Infrastructure", value: "County &mdash; large region or territory" }
     - { label: "Focus", value: "Municipal county of Broward, includes Fort Lauderdale" }
     - { label: "Resilience Type", value: "County-wide resilience plan for flood and heat risk" }
