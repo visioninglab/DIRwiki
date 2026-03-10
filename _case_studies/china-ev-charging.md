@@ -88,7 +88,7 @@ sections:
   - id: principles
     type: principles
     assessments:
-      - principle: "Shared Responsibility (P5)"
+      - principle: "Clearly Defined Accountabilities and Shared Responsibilities (P1)"
         status: done
         content: "Multiple government agencies: State Council, NDRC, Ministry of Transport, MIIT, Ministry of Finance, SAT, State Grid, EVCIPA, and local governments."
       - principle: "Proactively Protected (P2)"
@@ -100,10 +100,10 @@ sections:
       - principle: "Socially Engaged (P4)"
         status: done
         content: "Safety through CCC controls. Availability via NDRC government action. Private and public charging offering redundancy."
-      - principle: "Adaptively Transforming (P6)"
+      - principle: "Adaptively Transforming (P5)"
         status: todo
         content: "Evidence on ability to build back better through multi-agency collaborations needed."
-      - principle: "Continuously Learning (P1)"
+      - principle: "Continually Learning and Improving (P6)"
         status: todo
         content: "Details pending."
 
