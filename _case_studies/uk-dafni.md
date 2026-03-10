@@ -28,7 +28,7 @@ stats:
 infobox:
   title: "Quick Facts &mdash; DAFNI Platform"
   items:
-    - { label: "Last reviewed", value: "March 2026" }
+    - { label: "Last reviewed", value: "March 2026 (RQ)" }
     - { label: "Infrastructure", value: "Digital &mdash; DAFNI Platform" }
     - { label: "Focus", value: "Cross-sector infrastructure modelling" }
     - { label: "Owner", value: "STFC / UKRI" }
