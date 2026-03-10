@@ -96,9 +96,9 @@ sections:
   - id: principles
     type: principles
     assessments:
-      - principle: "Continuously Learning (P1)"
+      - principle: "Clearly Defined Accountabilities and Shared Responsibilities (P1)"
         status: done
-        content: "CReDO embedded continuous learning through iterative scenario modelling and cross-sector data sharing. The project ran across two phases, with Phase 2 building on Phase 1 findings. The federated digital twin architecture enables ongoing refinement as new climate data, asset information, and flood models become available. The project explicitly contributed to the evidence base for the National Digital Twin Programme."
+        content: "CReDO exemplifies shared responsibility through its multi-stakeholder collaboration model. The project brought together infrastructure operators (Anglian Water, BT, UK Power Networks), government agencies (Environment Agency), innovation bodies (Connected Places Catapult, CDBB), data standards organisations (Icebreaker One), and academic researchers. The federated architecture itself embodies shared responsibility — each party maintains data sovereignty while contributing to collective resilience insights."
       - principle: "Proactively Protected (P2)"
         status: done
         content: "CReDO was designed as an anticipatory tool — using climate projections and flood scenarios to identify infrastructure vulnerabilities before they materialise. By revealing cascading failure pathways, the demonstrator enabled proactive investment planning to protect critical interdependent systems rather than reacting to failures after they occur."
@@ -108,12 +108,12 @@ sections:
       - principle: "Socially Engaged (P4)"
         status: todo
         content: "Limited direct evidence of community engagement in the source material. CReDO was primarily a technical demonstrator involving infrastructure operators and researchers. The extent of public engagement or social impact assessment requires further investigation."
-      - principle: "Shared Responsibility (P5)"
-        status: done
-        content: "CReDO exemplifies shared responsibility through its multi-stakeholder collaboration model. The project brought together infrastructure operators (Anglian Water, BT, UK Power Networks), government agencies (Environment Agency), innovation bodies (Connected Places Catapult, CDBB), data standards organisations (Icebreaker One), and academic researchers. The federated architecture itself embodies shared responsibility — each party maintains data sovereignty while contributing to collective resilience insights."
-      - principle: "Adaptively Transforming (P6)"
+      - principle: "Adaptively Transforming (P5)"
         status: done
         content: "CReDO represents a transformative approach to infrastructure resilience: moving from siloed, single-sector risk assessment to a system-of-systems perspective. The federated digital twin architecture is designed to evolve, incorporating new sectors, regions, and hazard types over time. The project provides a replicable blueprint for adaptive, cross-sector resilience planning that can scale nationally and internationally."
+      - principle: "Continually Learning and Improving (P6)"
+        status: done
+        content: "CReDO embedded continuous learning through iterative scenario modelling and cross-sector data sharing. The project ran across two phases, with Phase 2 building on Phase 1 findings. The federated digital twin architecture enables ongoing refinement as new climate data, asset information, and flood models become available. The project explicitly contributed to the evidence base for the National Digital Twin Programme."
 
   - id: futures
     content: |
