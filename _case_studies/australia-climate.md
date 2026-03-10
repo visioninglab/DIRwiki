@@ -27,7 +27,7 @@ stats:
 infobox:
   title: "Quick Facts &mdash; Australia Climate Resilience"
   items:
-    - { label: "Last reviewed", value: "February 2026" }
+    - { label: "Last reviewed", value: "February 2026 (LV)" }
     - { label: "Infrastructure", value: "All (subject to Climate Change)" }
     - { label: "Focus", value: "Anticipate, manage and adapt to climate change" }
     - { label: "Resilience Type", value: "Climate resilience" }
