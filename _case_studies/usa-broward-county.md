@@ -91,7 +91,7 @@ sections:
   - id: principles
     type: principles
     assessments:
-      - principle: "Shared Responsibility (P5)"
+      - principle: "Clearly Defined Accountabilities and Shared Responsibilities (P1)"
         status: done
         content: "Leadership demonstrated by coming forward with hazard identification. For investors, &ldquo;Governance&rdquo; includes decision-making processes, disclosure, transparency and accountability."
       - principle: "Proactively Protected (P2)"
@@ -103,10 +103,10 @@ sections:
       - principle: "Socially Engaged (P4)"
         status: done
         content: "Municipality engagement through CRO leadership and Steering Committee involving community leaders and business CEOs."
-      - principle: "Adaptively Transforming (P6)"
+      - principle: "Adaptively Transforming (P5)"
         status: done
         content: "Adaptation Plans with multiple tiers. Different combinations assessed for performance and longer-term adaptation."
-      - principle: "Continuously Learning (P1)"
+      - principle: "Continually Learning and Improving (P6)"
         status: todo
         content: "Are they learning from other resilient cities?"
 
