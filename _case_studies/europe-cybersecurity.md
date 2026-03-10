@@ -100,7 +100,7 @@ sections:
   - id: principles
     type: principles
     assessments:
-      - principle: "Shared Responsibility (P5)"
+      - principle: "Clearly Defined Accountabilities and Shared Responsibilities (P1)"
         status: done
         content: "Collaboration between digital providers and critical infrastructure designers, architects, engineers, operators."
       - principle: "Proactively Protected (P2)"
@@ -112,10 +112,10 @@ sections:
       - principle: "Socially Engaged (P4)"
         status: done
         content: "ENISA promotes cyber hygiene for individuals: strong passwords, 2FA, software updates, email caution, data backups, secure Wi-Fi, antivirus, education, limiting personal info sharing, monitoring accounts."
-      - principle: "Adaptively Transforming (P6)"
+      - principle: "Adaptively Transforming (P5)"
         status: done
         content: "As digitalisation grows, new threats require approaches beyond traditional methods. Supported through Socially Engaged principle (citizen information) plus Continuously Learning."
-      - principle: "Continuously Learning (P1)"
+      - principle: "Continually Learning and Improving (P6)"
         status: todo
         content: "Details pending."
 
