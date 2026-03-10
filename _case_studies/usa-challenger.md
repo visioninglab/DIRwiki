@@ -27,7 +27,7 @@ stats:
 infobox:
   title: "Quick Facts &mdash; Space Shuttle Challenger"
   items:
-    - { label: "Last reviewed", value: "February 2026" }
+    - { label: "Last reviewed", value: "February 2026 (LV)" }
     - { label: "Infrastructure", value: "Space &mdash; all systems supporting space travel" }
     - { label: "Focus", value: "Space Shuttle Challenger" }
     - { label: "Resilience Type", value: "Disaster analysis" }
