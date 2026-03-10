@@ -90,9 +90,9 @@ sections:
   - id: principles
     type: principles
     assessments:
-      - principle: "Continuously Learning (P1)"
+      - principle: "Clearly Defined Accountabilities and Shared Responsibilities (P1)"
         status: done
-        content: "Continuous monitoring through AI video analytics provides persistent behavioural data and usage feedback, enabling the system to learn from patterns and refine operations over time."
+        content: "Coordination between local district authority and municipal transport commission demonstrates shared governance responsibility across administrative levels."
       - principle: "Proactively Protected (P2)"
         status: done
         content: "Peak-aware operations and dynamic adaptation to demand surges allow the system to anticipate and manage congestion before it becomes critical."
@@ -102,12 +102,12 @@ sections:
       - principle: "Socially Engaged (P4)"
         status: done
         content: "The user credit system creates behavioural incentives and transparency, engaging commuters as active participants in parking governance rather than passive subjects of enforcement."
-      - principle: "Shared Responsibility (P5)"
-        status: done
-        content: "Coordination between local district authority and municipal transport commission demonstrates shared governance responsibility across administrative levels."
-      - principle: "Adaptively Transforming (P6)"
+      - principle: "Adaptively Transforming (P5)"
         status: done
         content: "Chronic congestion is treated as a resilience problem rather than a simple traffic management issue, with a combined digital and physical approach representing adaptive transformation of urban transit governance."
+      - principle: "Continually Learning and Improving (P6)"
+        status: done
+        content: "Continuous monitoring through AI video analytics provides persistent behavioural data and usage feedback, enabling the system to learn from patterns and refine operations over time."
 
   - id: futures
     content: |
