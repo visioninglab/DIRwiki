@@ -27,7 +27,7 @@ stats:
 infobox:
   title: "Quick Facts &mdash; CReDO"
   items:
-    - { label: "Last reviewed", value: "March 2026" }
+    - { label: "Last reviewed", value: "March 2026 (RQ)" }
     - { label: "Infrastructure", value: "Digital &mdash; Cross-Sector Digital Twin Demonstrator" }
     - { label: "Focus", value: "Demonstrate how connected digital twins can reveal cascading flood impacts across interdependent infrastructure networks" }
     - { label: "Resilience Type", value: "Federated digital twin linking climate projections, flood modelling, and asset data across energy, telecoms, and water sectors" }
