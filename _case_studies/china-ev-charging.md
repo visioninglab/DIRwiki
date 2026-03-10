@@ -27,7 +27,7 @@ stats:
 infobox:
   title: "Quick Facts &mdash; China EV Charging"
   items:
-    - { label: "Last reviewed", value: "February 2026" }
+    - { label: "Last reviewed", value: "February 2026 (LV)" }
     - { label: "Infrastructure", value: "Electric Vehicle (EV) charging infrastructure" }
     - { label: "Focus", value: "Accelerate EV adoption nationwide" }
     - { label: "Resilience Type", value: "Energy transition" }
