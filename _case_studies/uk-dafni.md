@@ -86,9 +86,9 @@ sections:
   - id: principles
     type: principles
     assessments:
-      - principle: "Continuously Learning (P1)"
+      - principle: "Clearly Defined Accountabilities and Shared Responsibilities (P1)"
         status: done
-        content: "Supports scenario-based analysis and maintains a growing model library enabling iterative learning about infrastructure system behaviours."
+        content: "Shared platform model promotes multi-stakeholder collaboration across research institutions, government, and industry."
       - principle: "Proactively Protected (P2)"
         status: done
         content: "Supports assessment and simulation of extreme events including flooding and climate scenarios, enabling proactive risk identification."
@@ -98,12 +98,12 @@ sections:
       - principle: "Socially Engaged (P4)"
         status: todo
         content: "Public engagement and social dimensions of infrastructure modelling are areas for further development."
-      - principle: "Shared Responsibility (P5)"
-        status: done
-        content: "Shared platform model promotes multi-stakeholder collaboration across research institutions, government, and industry."
-      - principle: "Adaptively Transforming (P6)"
+      - principle: "Adaptively Transforming (P5)"
         status: done
         content: "Enables exploration of future scenarios and alternative infrastructure configurations, supporting adaptive planning and transformation."
+      - principle: "Continually Learning and Improving (P6)"
+        status: done
+        content: "Supports scenario-based analysis and maintains a growing model library enabling iterative learning about infrastructure system behaviours."
 
   - id: futures
     content: |
