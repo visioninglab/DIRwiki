@@ -87,7 +87,7 @@ sections:
   - id: principles
     type: principles
     assessments:
-      - principle: "Shared Responsibility (P5)"
+      - principle: "Clearly Defined Accountabilities and Shared Responsibilities (P1)"
         status: todo
         content: "Details pending."
       - principle: "Proactively Protected (P2)"
@@ -99,10 +99,10 @@ sections:
       - principle: "Socially Engaged (P4)"
         status: todo
         content: "Details pending."
-      - principle: "Adaptively Transforming (P6)"
+      - principle: "Adaptively Transforming (P5)"
         status: todo
         content: "Details pending."
-      - principle: "Continuously Learning (P1)"
+      - principle: "Continually Learning and Improving (P6)"
         status: done
         content: "After renovation, exploring &ldquo;station-city integration + technology empowerment&rdquo; model. Beijing Municipal Development and Reform Commission will support governance experiences replicable across the city."
 
