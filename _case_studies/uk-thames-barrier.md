@@ -28,7 +28,7 @@ stats:
 infobox:
   title: "Quick Facts &mdash; Thames Barrier"
   items:
-    - { label: "Last reviewed", value: "March 2026" }
+    - { label: "Last reviewed", value: "March 2026 (RQ)" }
     - { label: "Infrastructure", value: "Water &mdash; Thames Barrier Flood Defence" }
     - { label: "Focus", value: "Tidal surge and flood protection for London and the Thames estuary" }
     - { label: "Resilience Type", value: "Active flood defence barrier with rotating steel gates; designed for tidal surge events and increasingly used for fluvial flood management" }
