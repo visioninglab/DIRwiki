@@ -27,7 +27,7 @@ stats:
 infobox:
   title: "Quick Facts &mdash; EU CyberSecurity"
   items:
-    - { label: "Last reviewed", value: "February 2026" }
+    - { label: "Last reviewed", value: "February 2026 (LV)" }
     - { label: "Infrastructure", value: "Information and Telecommunications for infrastructure" }
     - { label: "Focus", value: "Protect critical infrastructures from cyber attack" }
     - { label: "Resilience Type", value: "Reporting, safeguarding, risk management of cyber threats" }
